@@ -9,18 +9,23 @@ function Login() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log('Success:', values);
     setLoading(true);
-    // perform login logic here
+
+    await fetch('/api/authentication/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    });
+
+    navigate('/');
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-  };
-
-  const submitForm = () => {
-    navigate('/');
   };
 
   return (
@@ -70,7 +75,7 @@ function Login() {
         </Form.Item>
 
         <Form.Item className="login-form-item">
-          <Button type="primary" htmlType="submit" loading={loading} onClick={submitForm}>
+          <Button type="primary" htmlType="submit" loading={loading}>
             Sign in
           </Button>
           {/* <Button type="default" htmlType="button" loading={loading}>
