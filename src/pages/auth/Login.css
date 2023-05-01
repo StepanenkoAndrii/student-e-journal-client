@@ -1,0 +1,123 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.login-layout {
+    margin: 0 auto;
+    min-width: 200px;
+    min-height: 150px;
+    height: auto;
+    max-width: 1020px;
+    flex: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 75px rgba(0, 0, 0, 0.2);
+}
+
+form {
+    width: 540px;
+    height: 380px;
+}
+
+.login-title {
+    padding: 35px 45px 0 45px;
+    color: #747474 !important;
+    font-weight: 300;
+}
+
+.login-form-item {
+    outline: none;
+    padding: 0 45px 0 45px;
+    /* text-align: center; */
+}
+
+.login-input {
+    font-size: 18px;
+    display: block;
+    font-family: 'Rubik', sans-serif;
+    width: 100%;
+    padding: 10px 1px;
+    border: 0;
+    border-bottom: 1px solid #747474;
+    outline: none;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+    border-radius: 0;
+    border-color: none !important;
+    box-shadow: none !important;
+}
+
+.login-input:hover {
+    border-bottom: 1px solid #a25f5f !important;
+}
+
+.ant-input-affix-wrapper {
+    padding-top: 0;
+} 
+
+.ant-input-affix-wrapper::before {
+    display: none;
+}
+
+.ant-input-suffix {
+    position: absolute;
+    transform: translate(420px, -20px);
+}
+
+.login-anchor-forgot-password a {
+    text-decoration: none;
+    color: #747474;
+    letter-spacing: 0.2px;
+    display: inline-block;
+    font-size: 16px;
+    display: inline-block;
+    position: relative;
+    margin: auto;
+}
+
+.login-anchor-forgot-password a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #774b4b;
+    transform-origin: bottom right;
+    transition: transform 0.5s ease-out;
+}
+
+.login-anchor-forgot-password a:hover {
+    color: #774b4b;
+}
+
+.login-anchor-forgot-password a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.login-form-item button {
+    display: block;
+    font-size: 16px;
+    border-radius: 5px;
+    width: 48%;
+    height: 40px;
+    margin: 0 auto;
+}
+
+/* .login-form-item button:nth-child(1) {
+    float: left;
+} */
+
+/* .login-form-item button:nth-child(2) {
+    float: right;
+    color: #747474;
+    border-color: #747474;
+}
+
+.login-form-item button:nth-child(2):hover {
+    color: #774b4b;
+    background-color: #f9f9f9;
+    border-color: #774b4b;
+} */
