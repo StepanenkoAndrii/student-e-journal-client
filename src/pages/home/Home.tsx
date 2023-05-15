@@ -106,16 +106,17 @@ export function Home() {
   async function handleSpecialityGroupsOnClick(event: any) {
     const specialityId: string = event.key;
 
-    if (!groups.length) {
-      const data: Response = await fetch(`/api/groups?specialityId=${specialityId}`);
-      const groupsData: IGroup[] = await data.json();
-
-      groups.push(...groupsData);
-      setGroups(groups);
-    }
+    console.log(specialityId);
+    // if (!groups.length) {
+    const data: Response = await fetch(`/api/groups?specialityId=${specialityId}`);
+    const groupsData: IGroup[] = await data.json();
+    setGroups(groupsData);
+    // }
   }
 
   const MenuSpecialityGroups = (props: IGroupsMenuProps) => {
+    console.log(groups);
+
     const specialityGroups = groups.filter(
       (group: IGroup) => group.specialityId === props.specialityId
     );
