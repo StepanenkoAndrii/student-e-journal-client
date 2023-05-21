@@ -1,20 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IGroup } from '../interfaces/interfaces';
+import { Menu } from 'antd';
+// import { TeamOutlined } from '@ant-design/icons';
 
-type Props = {
+interface Props {
   specialityId: string;
-};
+}
 
-export function Group(props: Props) {
+export function MenuGroups(props: Props) {
   const [groups, setGroups] = useState<IGroup[]>([]);
-  const [groupVisibility, setGroupVisibility] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  async function handleSpecialityGroupsOnClick(specialityId: string): Promise<void> {
-    if (!groups.length) {
-      const data: Response = await fetch(`/api/groups?specialityId=${specialityId}`);
-      const groupsData: IGroup[] = await data.json();
-      setGroups(groupsData);
+  // const title = 'Groups';
+
+  useEffect(() => {
+    if (isLoading) {
+      fetch(`/api/groups?specialityId=${props.specialityId}`)
+        .then((response) => response.json())
+        .then((responseData) => {
+          setGroups(responseData);
+          setIsLoading(false);
+        })
+        .catch((error) => console.log(`Error getting speciality groups`, error));
     }
-    setGroupVisibility(!groupVisibility);
-  }
+  }, [isLoading]);
+
+  const GroupsArray = groups.map((group: IGroup) => {
+    return <Menu.SubMenu key={group.groupId} title={group.name}></Menu.SubMenu>;
+  });
+
+  // return <>{GroupsArray}</>;
+  return (
+    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+      {GroupsArray}
+    </Menu>
+  );
 }
