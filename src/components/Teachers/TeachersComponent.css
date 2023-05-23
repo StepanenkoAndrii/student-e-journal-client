@@ -1,6 +1,40 @@
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #302f75 #ffffff;
+}
+
+*::-webkit-scrollbar {
+    width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #302f75;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+}
+
+.card {
+    border: 1px solid #e6e6e6;
+}
+
 .main-card {
     width: 85%;
+    height: 70vh;
     margin: 30px auto;
+    overflow-y: auto;
+}
+
+.list-item-card {
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.list-item-card:hover {
+    box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .list-item-card:not(:first-of-type) {
@@ -20,4 +54,31 @@
     width: 40px !important;
     height: 40px !important;
     font-size: 20px;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.card-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border: none;
+}
+
+.form-card {
+    margin: 25px auto;
+}
+
+.left-part {
+    float: left;
+    width: 50%;
+}
+
+.right-part {
+    float: left;
+    width: 50%;
 }

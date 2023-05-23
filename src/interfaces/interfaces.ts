@@ -44,4 +44,5 @@ interface ISubject {
 
 export interface ITeachersProps {
   teachers: ITeacher[];
+  setPageContentType: any;
 }
