@@ -71,14 +71,32 @@
 
 .form-card {
     margin: 25px auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
 }
 
-.left-part {
+/* .left-part {
     float: left;
-    width: 50%;
+    width: 35%;
 }
 
 .right-part {
     float: left;
-    width: 50%;
+    width: 65%;
+} */
+
+.key-card, .value-card {
+    /* height: 60px; */
+    display: flex;
+    align-items: center;
+}
+
+.key-card {
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.value-card {
+    font-size: 16px;
 }

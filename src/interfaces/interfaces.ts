@@ -45,4 +45,11 @@ interface ISubject {
 export interface ITeachersProps {
   teachers: ITeacher[];
   setPageContentType: any;
+  setPickedTeacher: any;
+}
+
+export interface ITeacherProps {
+  teacher?: ITeacher;
+  setPageContentType: any;
+  setPickedTeacher?: any;
 }

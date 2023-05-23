@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Card, List } from 'antd';
 import { ITeachersProps } from '../../interfaces/interfaces';
 
-export function AllTeachers({ teachers, setPageContentType }: ITeachersProps) {
+export function AllTeachers({ teachers, setPageContentType, setPickedTeacher }: ITeachersProps) {
   function getSubjectsAndTypes(teacherId: string) {
     const teacher = teachers.find((teacher) => teacher.userId === teacherId);
     const teacherSubjectsAndTypes = teacher!.subjects
@@ -15,7 +15,7 @@ export function AllTeachers({ teachers, setPageContentType }: ITeachersProps) {
   }
 
   function goToTeacherInfo(teacher: any) {
-    console.log('info', teacher);
+    setPickedTeacher(teacher);
     setPageContentType('teacherInfo');
   }
 

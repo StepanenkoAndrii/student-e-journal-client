@@ -1,45 +1,36 @@
-import { Avatar, Button, Card } from 'antd';
+import { Card } from 'antd';
 import './TeachersComponent.css';
 import { ITeachersProps } from '../../interfaces/interfaces';
-import { ArrowLeftOutlined, UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { AllTeachers } from './AllTeachers';
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import { TeacherInfo } from './TeacherInfo';
 
 export function TeachersComponent({ teachers }: ITeachersProps) {
   const [pageContentType, setPageContentType] = useState('allTeachers');
-
-  const TeacherInfo = (
-    <>
-      <Card className="card-header">
-        <Button
-          className="teacher-button back-button"
-          icon={<ArrowLeftOutlined />}
-          onClick={goBackToAllTeachers}
-        />
-        <Avatar className="avatar" size={96} icon={<UserOutlined />} />
-      </Card>
-      <Card className="form-card">
-        <Card className="left-part"></Card>
-        <Card className="right-part"></Card>
-      </Card>
-    </>
-  );
+  const [pickedTeacher, setPickedTeacher] = useState();
 
   const Content = (() => {
     switch (pageContentType) {
       case 'allTeachers':
       default:
-        return <AllTeachers teachers={teachers} setPageContentType={setPageContentType} />;
+        return (
+          <AllTeachers
+            teachers={teachers}
+            setPageContentType={setPageContentType}
+            setPickedTeacher={setPickedTeacher}
+          />
+        );
 
       case 'teacherInfo':
-        return TeacherInfo;
+        return (
+          <TeacherInfo
+            teacher={pickedTeacher}
+            setPageContentType={setPageContentType}
+            setPickedTeacher={setPickedTeacher}
+          />
+        );
     }
   })();
-
-  function goBackToAllTeachers() {
-    setPageContentType('allTeachers');
-  }
 
   return <Card className="main-card card">{Content}</Card>;
 }
