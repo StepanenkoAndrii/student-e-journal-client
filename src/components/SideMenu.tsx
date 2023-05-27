@@ -9,6 +9,7 @@ export function SideMenu({ setContentType, setContentData }: any) {
   const [isLoading, setIsLoading] = useState(true);
 
   const teachersTitle = 'Teachers';
+  const specialitiesTitle = 'Specialties';
 
   useEffect(() => {
     if (isLoading) {
@@ -18,7 +19,10 @@ export function SideMenu({ setContentType, setContentData }: any) {
           setSpecialities(responseData);
           setIsLoading(false);
         })
-        .catch((error) => console.log(`Error getting specialities`, error));
+        .catch((error) => {
+          setIsLoading(false);
+          console.log(`Error getting specialities`, error);
+        });
     }
   }, [isLoading]);
 
@@ -26,8 +30,6 @@ export function SideMenu({ setContentType, setContentData }: any) {
     fetch(`/api/users/teachers`)
       .then((response) => response.json())
       .then((responseData) => {
-        console.log(responseData);
-
         setContentType('teachers');
         setContentData(responseData);
       })
@@ -54,7 +56,9 @@ export function SideMenu({ setContentType, setContentData }: any) {
 
   return (
     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-      {SpecialitiesArray}
+      <Menu.SubMenu title={specialitiesTitle} icon={<BookOutlined />}>
+        {SpecialitiesArray}
+      </Menu.SubMenu>
       {Teachers}
     </Menu>
   );

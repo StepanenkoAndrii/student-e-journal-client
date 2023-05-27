@@ -22,7 +22,8 @@ export interface ISpecialityProps {
 type Role = 'Teacher' | 'Administrator';
 type TeacherType = 'Lector' | 'Practician';
 
-interface ITeacher {
+export interface ITeacher {
+  profileId: string;
   name: string;
   surname: string;
   email?: string;
@@ -36,7 +37,7 @@ interface ITeacher {
   subjects?: ISubject[];
 }
 
-interface ISubject {
+export interface ISubject {
   subjectId: string;
   name: string;
   type: TeacherType;
@@ -52,4 +53,12 @@ export interface ITeacherProps {
   teacher?: ITeacher;
   setPageContentType: any;
   setPickedTeacher?: any;
+}
+
+export interface IUser {
+  userId: string;
+  username: string;
+  password: string;
+  role: Role;
+  profileId: string;
 }

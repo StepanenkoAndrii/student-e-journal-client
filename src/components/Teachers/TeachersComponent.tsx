@@ -1,11 +1,10 @@
 import { Card } from 'antd';
 import './TeachersComponent.css';
-import { ITeachersProps } from '../../interfaces/interfaces';
 import { useState } from 'react';
 import { AllTeachers } from './AllTeachers';
 import { TeacherInfo } from './TeacherInfo';
 
-export function TeachersComponent({ teachers }: ITeachersProps) {
+export function TeachersComponent({ teachers }: any) {
   const [pageContentType, setPageContentType] = useState('allTeachers');
   const [pickedTeacher, setPickedTeacher] = useState();
 

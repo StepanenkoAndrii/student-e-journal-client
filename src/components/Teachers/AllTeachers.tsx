@@ -35,12 +35,13 @@ export function AllTeachers({ teachers, setPageContentType, setPickedTeacher }: 
         <Card
           key={teacher.userId}
           className="list-item-card card"
+          hoverable={true}
           onClick={() => goToTeacherInfo(teacher)}>
           <List.Item key={teacher.userId} className="list-item">
             <List.Item.Meta
               title={
                 <p className="list-item-meta-p-title">
-                  {teacher.surname} {teacher.name}
+                  {teacher.name} {teacher.surname}
                 </p>
               }
               description={

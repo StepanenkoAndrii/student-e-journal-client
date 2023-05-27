@@ -1,9 +1,11 @@
 import './Home.css';
-import { useState } from 'react';
-import { Layout, theme } from 'antd';
+import { useEffect, useState } from 'react';
+import { Button, Card, Layout } from 'antd';
 import { SideMenu } from '../../components/SideMenu';
 import { AdminDefaultContent } from '../../components/AdminDefaultContent';
 import { TeachersComponent } from '../../components/Teachers/TeachersComponent';
+import { LogoutOutlined } from '@ant-design/icons';
+import { IUser } from '../../interfaces/interfaces';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -11,13 +13,27 @@ export function Home() {
   const [collapsed, setCollapsed] = useState(false);
   const [contentType, setContentType] = useState('default');
   const [contentData, setContentData] = useState([]);
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken();
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<IUser>();
+
+  useEffect(() => {
+    if (isLoading) {
+      fetch(`/api/users/current`)
+        .then((response) => response.json())
+        .then((responseData) => {
+          setCurrentUser(responseData);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.log(`Error getting user`, error);
+        });
+    }
+  }, [isLoading]);
 
   const SpecialitiesContent = <span>Specialities content</span>;
 
-  const ContentValue = (contentType: string, contentData: any[]) => {
+  const ContentValue = (contentType: string, contentData: any) => {
     switch (contentType) {
       case 'default':
         return <AdminDefaultContent />;
@@ -30,6 +46,8 @@ export function Home() {
     }
   };
 
+  console.log('user', currentUser);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -38,21 +56,23 @@ export function Home() {
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}>
-        <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
+        <div className="logo-img-wrapper">
+          <img className="logo-img" src="src/assets/logo-2.jpg" />
+        </div>
         <SideMenu setContentType={setContentType} setContentData={setContentData} />
       </Sider>
       <Layout className="site-layout">
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header>
+          <Card>{currentUser ? currentUser!.username : 'no user'}</Card>
+          <Button icon={<LogoutOutlined />} className="logout-button"></Button>
+        </Header>
         <Content
           style={{
             margin: '0 16px'
-            // display: 'flex',
-            // justifyContent: 'center',
-            // alignItems: 'center'
           }}>
           {ContentValue(contentType, contentData)}
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+        <Footer>Student E-Journal ©2023 Created by Mefta</Footer>
       </Layout>
     </Layout>
   );
