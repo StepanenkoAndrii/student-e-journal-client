@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Login from './pages/auth/Login.tsx';
-import { Home } from './pages/home/Home.tsx';
+import { Home } from './pages/home/home.tsx';
+import { Login } from './pages/auth/login.tsx';
 
 const router = createBrowserRouter([
   {

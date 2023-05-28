@@ -1,9 +1,9 @@
-import './Home.css';
+import './home.css';
 import { useEffect, useState } from 'react';
 import { Button, Card, Layout } from 'antd';
-import { SideMenu } from '../../components/SideMenu';
-import { AdminDefaultContent } from '../../components/AdminDefaultContent';
-import { TeachersComponent } from '../../components/Teachers/TeachersComponent';
+import { SideMenu } from '../../components/side-menu';
+import { AdminDefaultContent } from '../../components/admin-default-content';
+import { TeachersComponent } from '../../components/teachers/teachers-component';
 import { LogoutOutlined } from '@ant-design/icons';
 import { IUser } from '../../interfaces/interfaces';
 
@@ -12,7 +12,6 @@ const { Header, Content, Footer, Sider } = Layout;
 export function Home() {
   const [collapsed, setCollapsed] = useState(false);
   const [contentType, setContentType] = useState('default');
-  const [contentData, setContentData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<IUser>();
 
@@ -33,14 +32,15 @@ export function Home() {
 
   const SpecialitiesContent = <span>Specialities content</span>;
 
-  const ContentValue = (contentType: string, contentData: any) => {
+  const ContentValue = (contentType: string) => {
     switch (contentType) {
       case 'default':
         return <AdminDefaultContent />;
       case 'specialities':
         return SpecialitiesContent;
       case 'teachers':
-        return <TeachersComponent teachers={contentData} />;
+        // return <TeachersComponent teachers={contentData} />;
+        return <TeachersComponent />;
       default:
         return <AdminDefaultContent />;
     }
@@ -59,7 +59,7 @@ export function Home() {
         <div className="logo-img-wrapper">
           <img className="logo-img" src="src/assets/logo-2.jpg" />
         </div>
-        <SideMenu setContentType={setContentType} setContentData={setContentData} />
+        <SideMenu setContentType={setContentType} />
       </Sider>
       <Layout className="site-layout">
         <Header>
@@ -70,7 +70,7 @@ export function Home() {
           style={{
             margin: '0 16px'
           }}>
-          {ContentValue(contentType, contentData)}
+          {ContentValue(contentType)}
         </Content>
         <Footer>Student E-Journal ©2023 Created by Mefta</Footer>
       </Layout>

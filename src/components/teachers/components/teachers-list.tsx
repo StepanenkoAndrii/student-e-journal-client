@@ -1,32 +1,14 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Card, List } from 'antd';
-import { ITeachersProps } from '../../interfaces/interfaces';
+import { ITeachersProps } from '../../../interfaces/interfaces';
 
-export function AllTeachers({ teachers, setPageContentType, setPickedTeacher }: ITeachersProps) {
-  function getSubjectsAndTypes(teacherId: string) {
-    const teacher = teachers.find((teacher) => teacher.userId === teacherId);
-    const teacherSubjectsAndTypes = teacher!.subjects
-      ? teacher!.subjects.map((subject) => {
-          return `${subject.type} in ${subject.name}`;
-        })
-      : ['Unknown teacher type'];
-
-    return teacherSubjectsAndTypes.join(', ');
-  }
-
-  function goToTeacherInfo(teacher: any) {
-    setPickedTeacher(teacher);
-    setPageContentType('teacherInfo');
-  }
-
-  async function handleTeacherDeletion() {
-    console.log('deleting teacher');
-  }
-
-  async function handleTeacherUpdate() {
-    console.log('updating teacher');
-  }
-
+export function TeachersList({
+  teachers,
+  goToTeacherInfo,
+  getSubjectsAndTypes,
+  handleTeacherDelete,
+  handleTeacherUpdate
+}: ITeachersProps) {
   return (
     <List
       className="list-of-teachers"
@@ -56,7 +38,7 @@ export function AllTeachers({ teachers, setPageContentType, setPickedTeacher }: 
               icon={<EditOutlined />}></Button>
             <Button
               className="teacher-button"
-              onClick={handleTeacherDeletion}
+              onClick={handleTeacherDelete}
               icon={<DeleteOutlined />}></Button>
           </List.Item>
         </Card>

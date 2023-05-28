@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ISpeciality } from '../interfaces/interfaces';
 import { Menu } from 'antd';
-import { MenuGroups } from './Groups';
+import { MenuGroups } from './groups';
 import { BookOutlined, UserOutlined } from '@ant-design/icons';
 
 export function SideMenu({ setContentType, setContentData }: any) {

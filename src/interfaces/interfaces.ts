@@ -45,15 +45,18 @@ export interface ISubject {
 
 export interface ITeachersProps {
   teachers: ITeacher[];
-  setPageContentType: any;
-  setPickedTeacher: any;
+  goToTeacherInfo: any;
+  getSubjectsAndTypes: any;
+  handleTeacherDelete: () => void;
+  handleTeacherUpdate: () => void;
 }
 
 export interface ITeacherProps {
-  teacher?: ITeacher;
+  teacher: ITeacher | null;
   setPageContentType: any;
   setPickedTeacher?: any;
-  // setTeachers?: any;
+  handleTeacherDelete: () => void;
+  handleTeacherUpdate: () => void;
 }
 
 export interface IUser {

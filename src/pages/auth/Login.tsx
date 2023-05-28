@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import './Login.css';
+import './login.css';
 import { Button, Form, Input, Layout, Typography } from 'antd';
 import AnchorLink from 'antd/es/anchor/AnchorLink';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+export function Login() {
   let navigate = useNavigate();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
