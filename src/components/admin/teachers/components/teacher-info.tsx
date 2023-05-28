@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import { ITeacherProps } from '../../../interfaces/interfaces';
+import { ITeacherProps } from '../../../../interfaces/interfaces';
 
 import { TeacherInfoHeader } from './teacher-info-header';
 

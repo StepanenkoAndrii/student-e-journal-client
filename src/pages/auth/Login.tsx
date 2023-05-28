@@ -10,10 +10,9 @@ export function Login() {
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: any) => {
-    console.log('Success:', values);
     setLoading(true);
 
-    await fetch('/api/authentication/login', {
+    const response = await fetch('/api/authentication/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -21,7 +20,10 @@ export function Login() {
       body: JSON.stringify(values)
     });
 
-    navigate('/');
+    const responseData = await response.json();
+
+    if (responseData.role === 'Admin') navigate('/admin');
+    else navigate('/teacher');
   };
 
   const onFinishFailed = (errorInfo: any) => {

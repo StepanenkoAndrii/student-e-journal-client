@@ -1,7 +1,7 @@
 import { Card, Modal } from 'antd';
 import './teachers-component.css';
 import { useEffect, useState } from 'react';
-import { ISubject, ITeacher, IUser } from '../../interfaces/interfaces';
+import { ISubject, ITeacher, IUser } from '../../../interfaces/interfaces';
 import { TeachersList } from './components/teachers-list';
 import { TeacherInfo } from './components/teacher-info';
 import { TeacherUpdate } from './components/teacher-update';
@@ -28,7 +28,7 @@ export function TeachersComponent() {
           setIsLoading(false);
         });
     }
-  }, []);
+  }, [isLoading]);
 
   async function handleFreeSubjects() {
     await fetch(`/api/teacher-subjects/free`)

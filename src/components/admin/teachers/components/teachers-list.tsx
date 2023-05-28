@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Card, List } from 'antd';
-import { ITeachersProps } from '../../../interfaces/interfaces';
+import { ITeachersProps } from '../../../../interfaces/interfaces';
 
 export function TeachersList({
   teachers,
@@ -21,7 +21,7 @@ export function TeachersList({
             className="list-item-card card"
             hoverable={true}
             onClick={() => goToTeacherInfo(teacher)}>
-            <List.Item key={teacher.userId} className="list-item">
+            <List.Item key={teacher.userId + `item`} className="list-item">
               <List.Item.Meta
                 title={
                   <p className="list-item-meta-p-title">

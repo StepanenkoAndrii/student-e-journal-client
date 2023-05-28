@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Select } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { ISubject } from '../../../interfaces/interfaces';
+import { ISubject } from '../../../../interfaces/interfaces';
 
 interface TeacherCreateProps {
   goBackToList: () => void;

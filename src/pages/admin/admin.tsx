@@ -1,19 +1,22 @@
-import './home.css';
+import './admin.css';
 import { useEffect, useState } from 'react';
 import { Button, Card, Layout } from 'antd';
 import { SideMenu } from '../../components/side-menu';
-import { AdminDefaultContent } from '../../components/admin-default-content';
-import { TeachersComponent } from '../../components/teachers/teachers-component';
+import { AdminDefaultContent } from '../../components/admin/other/admin-default-content';
 import { LogoutOutlined } from '@ant-design/icons';
 import { IUser } from '../../interfaces/interfaces';
+import { TeachersComponent } from '../../components/admin/teachers/teachers-component';
+import { useNavigate } from 'react-router-dom';
+import { SpecialitiesComponent } from '../../components/admin/specialities/specialities-component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-export function Home() {
+export function Admin() {
   const [collapsed, setCollapsed] = useState(false);
   const [contentType, setContentType] = useState('default');
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<IUser>();
+  const [currentUser, setCurrentUser] = useState<IUser | null>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoading) {
@@ -30,22 +33,29 @@ export function Home() {
     }
   }, [isLoading]);
 
-  const SpecialitiesContent = <span>Specialities content</span>;
-
   const ContentValue = (contentType: string) => {
     switch (contentType) {
       case 'default':
-        return <AdminDefaultContent />;
-      case 'specialities':
-        return SpecialitiesContent;
-      case 'teachers':
-        return <TeachersComponent />;
       default:
         return <AdminDefaultContent />;
+      case 'specialities':
+        return <SpecialitiesComponent />;
+      case 'teachers':
+        return <TeachersComponent />;
     }
   };
 
-  console.log('user', currentUser);
+  async function handleLogout() {
+    fetch(`/api/authentication/logout`)
+      .then((response) => response.json())
+      .then(() => {
+        setCurrentUser(null);
+        navigate('/login');
+      })
+      .catch((error) => {
+        console.log(`Error getting user`, error);
+      });
+  }
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -62,8 +72,13 @@ export function Home() {
       </Sider>
       <Layout className="site-layout">
         <Header>
-          <Card>{currentUser ? currentUser!.username : 'no user'}</Card>
-          <Button icon={<LogoutOutlined />} className="logout-button"></Button>
+          <Card className="user-username-card">
+            {currentUser ? `${currentUser!.username} (${currentUser!.role})` : 'No user'}
+          </Card>
+          <Button
+            icon={<LogoutOutlined />}
+            className="logout-button"
+            onClick={handleLogout}></Button>
         </Header>
         <Content>{ContentValue(contentType)}</Content>
         <Footer>Student E-Journal ©2023 Created by Mefta</Footer>

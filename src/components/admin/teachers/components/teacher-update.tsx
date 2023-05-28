@@ -1,5 +1,5 @@
 import { Button, Form, Input, Select } from 'antd';
-import { ISubject, ITeacher } from '../../../interfaces/interfaces';
+import { ISubject, ITeacher } from '../../../../interfaces/interfaces';
 import { TeacherInfoHeader } from './teacher-info-header';
 
 interface UpdateTeacherProps {

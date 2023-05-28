@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 import { MenuGroups } from './groups';
 import { BookOutlined, UserOutlined } from '@ant-design/icons';
 
-export function SideMenu({ setContentType, setContentData }: any) {
+export function SideMenu({ setContentType }: any) {
   const [specialities, setSpecialities] = useState<ISpeciality[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,13 +27,7 @@ export function SideMenu({ setContentType, setContentData }: any) {
   }, [isLoading]);
 
   async function handleTeachersOnClick() {
-    fetch(`/api/users/teachers`)
-      .then((response) => response.json())
-      .then((responseData) => {
-        setContentType('teachers');
-        setContentData(responseData);
-      })
-      .catch((error) => console.log(`Error getting teachers`, error));
+    setContentType('teachers');
   }
 
   const SpecialitiesArray = specialities.map((speciality: ISpeciality) => {
@@ -56,7 +50,10 @@ export function SideMenu({ setContentType, setContentData }: any) {
 
   return (
     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-      <Menu.SubMenu title={specialitiesTitle} icon={<BookOutlined />}>
+      <Menu.SubMenu
+        title={specialitiesTitle}
+        icon={<BookOutlined />}
+        onTitleClick={() => setContentType('specialities')}>
         {SpecialitiesArray}
       </Menu.SubMenu>
       {Teachers}

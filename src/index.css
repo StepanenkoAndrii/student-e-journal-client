@@ -74,10 +74,11 @@ button:focus-visible {
   min-width: 30%;
   width: 100vw;
   height: 100vh;
-  background-image: url('/src/assets/48885_2d_simple.jpg');
+  background-color: #001529;
+  /* background-image: url('/src/assets/48885_2d_simple.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; */
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card } from 'antd';
-import { ITeacher } from '../../../interfaces/interfaces';
+import { ITeacher } from '../../../../interfaces/interfaces';
 
 interface UpdateTeacherProps {
   teacher: ITeacher | null;
