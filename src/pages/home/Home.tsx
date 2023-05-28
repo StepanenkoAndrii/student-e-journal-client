@@ -39,7 +39,6 @@ export function Home() {
       case 'specialities':
         return SpecialitiesContent;
       case 'teachers':
-        // return <TeachersComponent teachers={contentData} />;
         return <TeachersComponent />;
       default:
         return <AdminDefaultContent />;
@@ -66,12 +65,7 @@ export function Home() {
           <Card>{currentUser ? currentUser!.username : 'no user'}</Card>
           <Button icon={<LogoutOutlined />} className="logout-button"></Button>
         </Header>
-        <Content
-          style={{
-            margin: '0 16px'
-          }}>
-          {ContentValue(contentType)}
-        </Content>
+        <Content>{ContentValue(contentType)}</Content>
         <Footer>Student E-Journal ©2023 Created by Mefta</Footer>
       </Layout>
     </Layout>

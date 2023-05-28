@@ -24,9 +24,10 @@
 .main-card {
     width: 85%;
     max-height: 75vh;
-    height: 95%;
+    height: 100%;
     margin: 30px auto;
-    overflow-y: auto;
+    overflow-y: hidden;
+    position: relative;
 }
 
 .avatar {
@@ -52,6 +53,14 @@
 
 .list-item-card:not(:first-of-type) {
     margin-top: 25px;
+}
+
+.list-item-card {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    width: 95%;
 }
 
 .list-item-meta-p-title {
@@ -84,6 +93,8 @@
 
 .form-card {
     margin: 0 auto;
+    height: 60vh;
+    overflow-y: auto;
 }
 
 .key-card, .value-card {
@@ -126,4 +137,29 @@
 .item-row-button {
     display: flex;
     justify-content: center;
+}
+
+label {
+    font-size: 16px !important;
+}
+  
+.ant-form-item-control-input,
+.ant-form-item-control-input input,
+.ant-form-item-control-input textarea {
+    font-size: 16px;
+}
+
+.new-teacher-button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    font-size: 16px;
+    width: 200px;
+    height: 40px;
+}
+
+.list-of-teachers {
+    height: 65vh;
+    overflow-y: auto;
 }

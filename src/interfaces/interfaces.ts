@@ -49,6 +49,7 @@ export interface ITeachersProps {
   getSubjectsAndTypes: any;
   handleTeacherDelete: () => void;
   handleTeacherUpdate: () => void;
+  goToTeacherCreate: () => void;
 }
 
 export interface ITeacherProps {

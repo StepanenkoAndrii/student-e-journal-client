@@ -1,10 +1,11 @@
 import { Card, Modal } from 'antd';
 import './teachers-component.css';
 import { useEffect, useState } from 'react';
-import { ISubject, ITeacher } from '../../interfaces/interfaces';
+import { ISubject, ITeacher, IUser } from '../../interfaces/interfaces';
 import { TeachersList } from './components/teachers-list';
 import { TeacherInfo } from './components/teacher-info';
 import { TeacherUpdate } from './components/teacher-update';
+import { TeacherCreate } from './components/teacher-create';
 
 export function TeachersComponent() {
   const [pageContentType, setPageContentType] = useState('teachersList');
@@ -29,8 +30,8 @@ export function TeachersComponent() {
     }
   }, []);
 
-  function handleFreeSubjects() {
-    fetch(`/api/teacher-subjects/free`)
+  async function handleFreeSubjects() {
+    await fetch(`/api/teacher-subjects/free`)
       .then((response) => response.json())
       .then((responseData) => {
         setFreeSubjects(responseData);
@@ -44,8 +45,17 @@ export function TeachersComponent() {
     setIsModalOpen(true);
   }
 
-  function handleOk() {
-    fetch(`/api/users/${pickedTeacher!.userId}`, {
+  async function handleOk() {
+    await fetch(`/api/teacher-subjects/${pickedTeacher!.userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).catch((error) => {
+      console.log(`Error deleting teacher subjects`, error);
+    });
+
+    await fetch(`/api/users/${pickedTeacher!.userId}`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
@@ -54,14 +64,14 @@ export function TeachersComponent() {
       console.log(`Error deleting teacher`, error);
     });
 
-    fetch(`/api/teacher-subjects/${pickedTeacher!.userId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      }
-    }).catch((error) => {
-      console.log(`Error deleting teacher subjects`, error);
-    });
+    await fetch(`/api/users/teachers`)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setAllTeachers(responseData);
+      })
+      .catch((error) => console.log(`Error getting teachers`, error));
+
+    await handleFreeSubjects();
 
     setIsModalOpen(false);
     setPageContentType('teachersList');
@@ -83,7 +93,7 @@ export function TeachersComponent() {
     };
     delete updatedValues.subjects;
 
-    fetch(`/api/users/${pickedTeacher!.userId}`, {
+    await fetch(`/api/users/${pickedTeacher!.userId}`, {
       method: 'PATCH',
       body: JSON.stringify(updatedValues),
       headers: {
@@ -98,7 +108,7 @@ export function TeachersComponent() {
       teacherId: pickedTeacher!.userId
     };
 
-    fetch(`/api/teacher-subjects`, {
+    await fetch(`/api/teacher-subjects`, {
       method: 'PATCH',
       body: JSON.stringify(updatedSubjects),
       headers: {
@@ -121,14 +131,64 @@ export function TeachersComponent() {
       return teacher;
     });
 
+    await handleFreeSubjects();
+
     setPickedTeacher(updatedTeacher);
     setAllTeachers(updatedTeachers);
     setPageContentType('teacherInfo');
   }
 
+  async function handleOnCreateSubmit(values: any) {
+    const updatedValues = { ...values, role: 'Teacher' };
+    delete updatedValues.subjects;
+
+    const response = await fetch(`/api/authentication/register`, {
+      method: 'POST',
+      body: JSON.stringify(updatedValues),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    });
+    const newPartialTeacher: IUser = await response.json();
+
+    const newTeacherId = newPartialTeacher.userId;
+
+    const updatedSubjects = {
+      subjects: values.subjects?.map((subject: any) => JSON.parse(subject)),
+      teacherId: newTeacherId
+    };
+
+    await fetch(`/api/teacher-subjects`, {
+      method: 'POST',
+      body: JSON.stringify(updatedSubjects),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).catch((error) => {
+      console.log(`Error updating teacher subjects`, error);
+    });
+
+    const newTeacher = {
+      ...updatedValues,
+      userId: newTeacherId,
+      subjects: values.subjects?.map((subject: any) => JSON.parse(subject))
+    };
+
+    await handleFreeSubjects();
+
+    setPickedTeacher(null);
+    setAllTeachers([...allTeachers, newTeacher]);
+    setPageContentType('teacherList');
+  }
+
   function goToTeacherInfo(teacher: any) {
     setPickedTeacher(teacher);
     setPageContentType('teacherInfo');
+  }
+
+  function goToTeacherCreate() {
+    setPickedTeacher(null);
+    setPageContentType('teacherCreate');
   }
 
   function getSubjectsAndTypes(teacherId: string) {
@@ -142,6 +202,10 @@ export function TeachersComponent() {
     return teacherSubjectsAndTypes.join(', ');
   }
 
+  function goBackToList() {
+    setPageContentType('teacherList');
+  }
+
   const Content = (() => {
     switch (pageContentType) {
       case 'teachersList':
@@ -153,6 +217,7 @@ export function TeachersComponent() {
             getSubjectsAndTypes={getSubjectsAndTypes}
             handleTeacherDelete={handleTeacherDelete}
             handleTeacherUpdate={handleTeacherUpdate}
+            goToTeacherCreate={goToTeacherCreate}
           />
         );
 
@@ -175,6 +240,15 @@ export function TeachersComponent() {
             setPageContentType={setPageContentType}
             handleTeacherDelete={handleTeacherDelete}
             handleTeacherUpdate={handleTeacherUpdate}
+          />
+        );
+
+      case 'teacherCreate':
+        return (
+          <TeacherCreate
+            goBackToList={goBackToList}
+            handleOnCreateSubmit={handleOnCreateSubmit}
+            freeSubjects={freeSubjects}
           />
         );
     }

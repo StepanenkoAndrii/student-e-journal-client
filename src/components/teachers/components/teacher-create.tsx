@@ -1,50 +1,29 @@
-import { Button, Form, Input, Select } from 'antd';
-import { ISubject, ITeacher } from '../../../interfaces/interfaces';
-import { TeacherInfoHeader } from './teacher-info-header';
+import { Button, Card, Form, Input, Select } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ISubject } from '../../../interfaces/interfaces';
 
-interface UpdateTeacherProps {
-  teacher: ITeacher | null;
+interface TeacherCreateProps {
+  goBackToList: () => void;
+  handleOnCreateSubmit: any;
   freeSubjects: ISubject[];
-  // eslint-disable-next-line no-unused-vars
-  handleOnSubmit: (values: any) => Promise<void>;
-  setPageContentType: any;
-  handleTeacherDelete: () => void;
-  handleTeacherUpdate: () => void;
 }
 
-export function TeacherUpdate({
-  teacher,
-  freeSubjects,
-  handleOnSubmit,
-  setPageContentType,
-  handleTeacherDelete,
-  handleTeacherUpdate
-}: UpdateTeacherProps) {
-  const initialValues = {
-    ...teacher!,
-    subjects: teacher!.subjects!.map((subject) =>
-      JSON.stringify({
-        subjectId: subject.subjectId,
-        name: subject.name,
-        type: subject.type
-      })
-    )
-  };
-
-  const freeAndTeacherSubjects: ISubject[] = [...teacher!.subjects!, ...freeSubjects];
-
+export function TeacherCreate({
+  goBackToList,
+  handleOnCreateSubmit,
+  freeSubjects
+}: TeacherCreateProps) {
   return (
     <>
-      <TeacherInfoHeader
-        teacher={teacher}
-        type={'teacherUpdate'}
-        setPageContentType={setPageContentType}
-        handleTeacherDelete={handleTeacherDelete}
-        handleTeacherUpdate={handleTeacherUpdate}
-      />
+      <Card className="card-header">
+        <Button
+          className="teacher-button back-button"
+          icon={<ArrowLeftOutlined />}
+          onClick={goBackToList}
+        />
+      </Card>
       <Form
         className="update-teacher-form"
-        initialValues={initialValues}
         labelCol={{
           span: 8
         }}
@@ -52,7 +31,7 @@ export function TeacherUpdate({
           span: 20
         }}
         layout="horizontal"
-        onFinish={handleOnSubmit}>
+        onFinish={handleOnCreateSubmit}>
         <Form.Item
           label="First name"
           name="name"
@@ -87,6 +66,36 @@ export function TeacherUpdate({
           <Input />
         </Form.Item>
         <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Password must be provided'
+            }
+          ]}>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Confirm password"
+          name="confirmPassword"
+          rules={[
+            {
+              required: true,
+              message: 'Passwords are not equal'
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Passwords are not equal!'));
+              }
+            })
+          ]}>
+          <Input />
+        </Form.Item>
+        <Form.Item
           label="Email"
           name="email"
           rules={[
@@ -116,7 +125,7 @@ export function TeacherUpdate({
         </Form.Item>
         <Form.Item label="Subjects" name="subjects">
           <Select mode="multiple">
-            {freeAndTeacherSubjects.map((subject) => {
+            {freeSubjects.map((subject) => {
               return (
                 <Select.Option
                   key={subject.subjectId + subject.type}

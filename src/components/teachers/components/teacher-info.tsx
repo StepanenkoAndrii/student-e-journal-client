@@ -13,7 +13,6 @@ export function TeacherInfo({
     const keys = [
       'First name',
       'Second name',
-      'Roles',
       'Username',
       'Email',
       'Phone number',
@@ -25,13 +24,6 @@ export function TeacherInfo({
     const values = [
       teacher!.name,
       teacher!.surname,
-      teacher!.subjects
-        ? teacher!
-            .subjects!.map((subject) => {
-              return subject.type;
-            })
-            .join(', ')
-        : 'Unknown',
       teacher!.username,
       teacher!.email,
       teacher!.phoneNumber,
@@ -76,7 +68,6 @@ export function TeacherInfo({
         <CustomCardRow currValue={5} />
         <CustomCardRow currValue={6} />
         <CustomCardRow currValue={7} />
-        <CustomCardRow currValue={8} />
       </Card>
     </>
   );
