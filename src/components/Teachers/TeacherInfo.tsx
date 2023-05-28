@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Form, Input, Select } from 'antd';
+import { Avatar, Button, Card, Form, Input, Modal, Select } from 'antd';
 import { ITeacherProps } from '../../interfaces/interfaces';
 import { ArrowLeftOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ export function TeacherInfo({ teacher, setPageContentType, setPickedTeacher }: I
   const [teacherInfoPageContentType, setTeacherInfoPageContentType] = useState('teacherInfo');
   const [freeSubjects, setFreeSubjects] = useState<ISubject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (isLoading) {
@@ -42,17 +43,28 @@ export function TeacherInfo({ teacher, setPageContentType, setPickedTeacher }: I
       case 'teacherInfo':
       default:
         return (
-          <Card className="form-card">
-            <CustomCardRow currValue={0} />
-            <CustomCardRow currValue={1} />
-            <CustomCardRow currValue={2} />
-            <CustomCardRow currValue={3} />
-            <CustomCardRow currValue={4} />
-            <CustomCardRow currValue={5} />
-            <CustomCardRow currValue={6} />
-            <CustomCardRow currValue={7} />
-            <CustomCardRow currValue={8} />
-          </Card>
+          <>
+            <Card className="form-card">
+              <CustomCardRow currValue={0} />
+              <CustomCardRow currValue={1} />
+              <CustomCardRow currValue={2} />
+              <CustomCardRow currValue={3} />
+              <CustomCardRow currValue={4} />
+              <CustomCardRow currValue={5} />
+              <CustomCardRow currValue={6} />
+              <CustomCardRow currValue={7} />
+              <CustomCardRow currValue={8} />
+            </Card>
+            <Modal
+              title="Teacher deletion"
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}>
+              <h4>
+                {`Are you sure you want to delete teacher ${teacher!.name} ${teacher!.surname}?`}
+              </h4>
+            </Modal>
+          </>
         );
 
       case 'updateTeacherInfo':
@@ -205,22 +217,62 @@ export function TeacherInfo({ teacher, setPageContentType, setPickedTeacher }: I
     );
   }
 
+  // async function getAllTeachers() {
+  //   fetch(`/api/teachers`)
+  //     .then((response) => response.json())
+  //     .then((responseData) => {
+  //       setTeachers(responseData);
+  //     })
+  //     .catch((error) => {
+  //       setIsLoading(false);
+  //       console.log(`Error getting teachers`, error);
+  //     });
+  // }
+
+  function showModal() {
+    setIsModalOpen(true);
+  }
+
+  function handleOk() {
+    fetch(`/api/users/${teacher!.userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).catch((error) => {
+      console.log(`Error deleting teacher`, error);
+    });
+
+    fetch(`/api/teacher-subjects/${teacher!.userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }).catch((error) => {
+      console.log(`Error deleting teacher subjects`, error);
+    });
+
+    setIsModalOpen(false);
+    setPageContentType('allTeachers');
+    // getAllTeachers();
+    setPickedTeacher(null);
+  }
+
+  function handleCancel() {
+    setIsModalOpen(false);
+  }
+
   function goBack(type: string) {
     if (type === 'teacherInfo') {
       setPageContentType('allTeachers');
+      // getAllTeachers();
       setPickedTeacher(null);
     } else {
       setTeacherInfoPageContentType('teacherInfo');
     }
   }
 
-  async function handleTeacherDeletion() {
-    console.log('deleting teacher');
-  }
-
-  async function handleTeacherUpdate() {
-    console.log('setTeacherInfoPageContentType');
-
+  function handleTeacherUpdate() {
     setTeacherInfoPageContentType('updateTeacherInfo');
   }
 
@@ -240,8 +292,6 @@ export function TeacherInfo({ teacher, setPageContentType, setPickedTeacher }: I
     }).catch((error) => {
       console.log(`Error updating user`, error);
     });
-
-    console.log(values.subjects?.map((subject: any) => JSON.parse(subject)));
 
     const updatedSubjects = {
       subjects: values.subjects?.map((subject: any) => JSON.parse(subject)),
@@ -287,7 +337,7 @@ export function TeacherInfo({ teacher, setPageContentType, setPickedTeacher }: I
               icon={<EditOutlined />}></Button>
             <Button
               className="teacher-button right-button"
-              onClick={handleTeacherDeletion}
+              onClick={showModal}
               icon={<DeleteOutlined />}></Button>
           </>
         )}

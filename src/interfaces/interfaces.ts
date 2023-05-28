@@ -53,6 +53,7 @@ export interface ITeacherProps {
   teacher?: ITeacher;
   setPageContentType: any;
   setPickedTeacher?: any;
+  // setTeachers?: any;
 }
 
 export interface IUser {
