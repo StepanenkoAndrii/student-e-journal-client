@@ -114,7 +114,15 @@ export function TeachersComponent() {
       subjects: values.subjects?.map((subject: any) => JSON.parse(subject))
     };
 
+    const updatedTeachers = allTeachers.map((teacher) => {
+      if (teacher.userId === pickedTeacher!.userId) {
+        return updatedTeacher;
+      }
+      return teacher;
+    });
+
     setPickedTeacher(updatedTeacher);
+    setAllTeachers(updatedTeachers);
     setPageContentType('teacherInfo');
   }
 
