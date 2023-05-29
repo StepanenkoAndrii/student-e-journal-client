@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 import { MenuGroups } from './groups';
 import { BookOutlined, UserOutlined } from '@ant-design/icons';
 
-export function SideMenu({ setContentType }: any) {
+export function SideMenu({ setContentType, setContentData }: any) {
   const [specialities, setSpecialities] = useState<ISpeciality[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +37,11 @@ export function SideMenu({ setContentType }: any) {
         title={`${speciality.number}, ${speciality.name}`}
         icon={<BookOutlined />}
         onTitleClick={() => setContentType('specialities')}>
-        <MenuGroups specialityId={speciality.specialityId} />
+        <MenuGroups
+          specialityId={speciality.specialityId}
+          setContentType={setContentType}
+          setContentData={setContentData}
+        />
       </Menu.SubMenu>
     );
   });

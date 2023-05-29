@@ -6,7 +6,7 @@ import { SpecialitiesList } from './components/specialities-list';
 import { SpecialityCreate } from './components/speciality-create';
 
 export function SpecialitiesComponent() {
-  const [pageContentType, setPageContentType] = useState('specialityList');
+  const [pageContentType, setPageContentType] = useState('specialitiesList');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pickedSpeciality, setPickedSpeciality] = useState<ISpeciality | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,7 +92,7 @@ export function SpecialitiesComponent() {
   }
 
   function goBackToList() {
-    setPageContentType('specialityList');
+    setPageContentType('specialitiesList');
   }
 
   async function handleOnCreateSubmit(values: any) {
@@ -131,7 +131,7 @@ export function SpecialitiesComponent() {
       })
       .catch((error) => console.log(`Error getting specialities`, error));
 
-    setPageContentType('specialityList');
+    setPageContentType('specialitiesList');
   }
 
   const Content = (() => {

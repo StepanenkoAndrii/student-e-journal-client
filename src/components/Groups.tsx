@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { IGroup } from '../interfaces/interfaces';
 import { Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-// import { TeamOutlined } from '@ant-design/icons';
 
 interface Props {
   specialityId: string;
+  setContentType: any;
+  setContentData: any;
 }
 
-export function MenuGroups(props: Props) {
+export function MenuGroups({ specialityId, setContentType, setContentData }: Props) {
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,7 +17,7 @@ export function MenuGroups(props: Props) {
 
   useEffect(() => {
     if (isLoading) {
-      fetch(`/api/groups?specialityId=${props.specialityId}`)
+      fetch(`/api/groups?specialityId=${specialityId}`)
         .then((response) => response.json())
         .then((responseData) => {
           setGroups(responseData);
@@ -36,7 +37,13 @@ export function MenuGroups(props: Props) {
 
   return (
     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-      <Menu.SubMenu title={groupsTitle} icon={<UserOutlined />}>
+      <Menu.SubMenu
+        title={groupsTitle}
+        icon={<UserOutlined />}
+        onTitleClick={() => {
+          setContentType('groups');
+          setContentData(specialityId);
+        }}>
         {GroupsArray}
       </Menu.SubMenu>
     </Menu>

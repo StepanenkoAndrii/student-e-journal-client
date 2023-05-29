@@ -8,12 +8,14 @@ import { IUser } from '../../interfaces/interfaces';
 import { TeachersComponent } from '../../components/admin/teachers/teachers-component';
 import { useNavigate } from 'react-router-dom';
 import { SpecialitiesComponent } from '../../components/admin/specialities/specialities-component';
+import { GroupsComponent } from '../../components/admin/groups/groups-component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 export function Admin() {
   const [collapsed, setCollapsed] = useState(false);
   const [contentType, setContentType] = useState('default');
+  const [contentData, setContentData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<IUser | null>();
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ export function Admin() {
     }
   }, [isLoading]);
 
-  const ContentValue = (contentType: string) => {
+  const ContentValue = (contentType: string, contentData: any) => {
     switch (contentType) {
       case 'default':
       default:
@@ -42,6 +44,8 @@ export function Admin() {
         return <SpecialitiesComponent />;
       case 'teachers':
         return <TeachersComponent />;
+      case 'groups':
+        return <GroupsComponent specialityId={contentData} />;
     }
   };
 
@@ -68,7 +72,7 @@ export function Admin() {
         <div className="logo-img-wrapper">
           <img className="logo-img" src="src/assets/logo-2.jpg" />
         </div>
-        <SideMenu setContentType={setContentType} />
+        <SideMenu setContentType={setContentType} setContentData={setContentData} />
       </Sider>
       <Layout className="site-layout">
         <Header>
@@ -80,7 +84,7 @@ export function Admin() {
             className="logout-button"
             onClick={handleLogout}></Button>
         </Header>
-        <Content>{ContentValue(contentType)}</Content>
+        <Content>{ContentValue(contentType, contentData)}</Content>
         <Footer>Student E-Journal ©2023 Created by Mefta</Footer>
       </Layout>
     </Layout>
