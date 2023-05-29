@@ -13,7 +13,7 @@ export function TeachersList({
   return (
     <>
       <List
-        className="list-of-teachers"
+        className="list-of-data"
         dataSource={teachers}
         renderItem={(teacher) => (
           <Card

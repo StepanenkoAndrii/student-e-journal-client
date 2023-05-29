@@ -67,3 +67,11 @@ export interface IUser {
   role: Role;
   profileId: string;
 }
+
+export interface ISpecialityGroup {
+  groups: string;
+  specialityId: string;
+  name: string;
+  facultyId: string;
+  number?: number;
+}
