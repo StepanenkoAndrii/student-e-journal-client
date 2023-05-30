@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { IGroup } from '../interfaces/interfaces';
 import { Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -7,29 +6,28 @@ interface Props {
   specialityId: string;
   setContentType: any;
   setContentData: any;
+  groups: IGroup[];
+  handleSpecialityGroups: any;
 }
 
-export function MenuGroups({ specialityId, setContentType, setContentData }: Props) {
-  const [groups, setGroups] = useState<IGroup[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+export function MenuGroups({
+  specialityId,
+  setContentType,
+  setContentData,
+  groups,
+  handleSpecialityGroups
+}: Props) {
   const groupsTitle = 'Groups';
-
-  useEffect(() => {
-    if (isLoading) {
-      fetch(`/api/groups?specialityId=${specialityId}`)
-        .then((response) => response.json())
-        .then((responseData) => {
-          setGroups(responseData);
-          setIsLoading(false);
-        })
-        .catch((error) => console.log(`Error getting speciality groups`, error));
-    }
-  }, [isLoading]);
 
   const GroupsArray = groups.map((group: IGroup) => {
     return (
-      <Menu.Item key={group.groupId} title={group.name}>
+      <Menu.Item
+        key={group.groupId}
+        title={group.name}
+        onClick={() => {
+          setContentData(group.groupId);
+          setContentType('students');
+        }}>
         {group.name}
       </Menu.Item>
     );
@@ -42,6 +40,7 @@ export function MenuGroups({ specialityId, setContentType, setContentData }: Pro
         icon={<UserOutlined />}
         onTitleClick={() => {
           setContentType('groups');
+          handleSpecialityGroups(specialityId);
           setContentData(specialityId);
         }}>
         {GroupsArray}

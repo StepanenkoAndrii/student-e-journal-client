@@ -6,9 +6,10 @@ import { GroupCreate } from './components/group-create';
 
 interface GroupsComponentProps {
   specialityId: string;
+  setSpecialityGroups: any;
 }
 
-export function GroupsComponent({ specialityId }: GroupsComponentProps) {
+export function GroupsComponent({ specialityId, setSpecialityGroups }: GroupsComponentProps) {
   const [pageContentType, setPageContentType] = useState('groupsList');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pickedGroup, setPickedGroup] = useState<IGroup | null>(null);
@@ -35,9 +36,12 @@ export function GroupsComponent({ specialityId }: GroupsComponentProps) {
       console.log(`Error deleting group`, error);
     });
 
-    fetch(`/api/groups?specialityId=${specialityId}`)
+    await fetch(`/api/groups?specialityId=${specialityId}`)
       .then((response) => response.json())
-      .then((groupsData: IGroup[]) => setGroups(groupsData))
+      .then((groupsData: IGroup[]) => {
+        setGroups(groupsData);
+        setSpecialityGroups(groupsData);
+      })
       .catch((error) => console.log(`Error getting groups`, error));
 
     setIsModalOpen(false);
@@ -74,9 +78,12 @@ export function GroupsComponent({ specialityId }: GroupsComponentProps) {
       console.log(`Error creating new group`, error);
     });
 
-    fetch(`/api/groups?specialityId=${specialityId}`)
+    await fetch(`/api/groups?specialityId=${specialityId}`)
       .then((response) => response.json())
-      .then((groupsData: IGroup[]) => setGroups(groupsData))
+      .then((groupsData: IGroup[]) => {
+        setGroups(groupsData);
+        setSpecialityGroups(groupsData);
+      })
       .catch((error) => console.log(`Error getting groups`, error));
 
     setPageContentType('groupsList');
@@ -106,11 +113,11 @@ export function GroupsComponent({ specialityId }: GroupsComponentProps) {
     <>
       <Card className="main-card card">{Content}</Card>
       <Modal
-        title="Speciality deletion"
+        title="Group deletion"
         open={isModalOpen}
         onOk={() => handleOk(pickedGroup!.groupId)}
         onCancel={handleCancel}>
-        <h4>{`Are you sure you want to delete speciality ${pickedGroup?.name}?`}</h4>
+        <h4>{`Are you sure you want to delete group ${pickedGroup?.name}?`}</h4>
       </Modal>
     </>
   );

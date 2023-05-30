@@ -5,13 +5,17 @@ import { Card, Modal } from 'antd';
 import { SpecialitiesList } from './components/specialities-list';
 import { SpecialityCreate } from './components/speciality-create';
 
-export function SpecialitiesComponent() {
+interface SpecialitiesComponentProps {
+  setSpecialities: any;
+}
+
+export function SpecialitiesComponent({ setSpecialities }: SpecialitiesComponentProps) {
   const [pageContentType, setPageContentType] = useState('specialitiesList');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pickedSpeciality, setPickedSpeciality] = useState<ISpeciality | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [specialityGroups, setSpecialityGroups] = useState<ISpecialityGroup[]>([]);
-  const facultyId = `b2b369ea-bd3b-4122-b199-4950901cf645`;
+  const facultyId = `97d736d9-ed3d-46d3-874c-6ee050b59d1c`;
 
   useEffect(() => {
     if (isLoading) {
@@ -51,7 +55,7 @@ export function SpecialitiesComponent() {
       console.log(`Error deleting speciality`, error);
     });
 
-    fetch(`/api/specialities`)
+    await fetch(`/api/specialities`)
       .then((response) => response.json())
       .then((specialitiesData: ISpeciality[]) => {
         const specialityGroupsData: ISpecialityGroup[] = [];
@@ -73,6 +77,15 @@ export function SpecialitiesComponent() {
         });
       })
       .catch((error) => console.log(`Error getting specialities`, error));
+
+    await fetch(`/api/specialities`)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setSpecialities(responseData);
+      })
+      .catch((error) => {
+        console.log(`Error getting specialities`, error);
+      });
 
     setIsModalOpen(false);
     setPageContentType('specialitiesList');
@@ -108,7 +121,7 @@ export function SpecialitiesComponent() {
       console.log(`Error creating new speciality`, error);
     });
 
-    fetch(`/api/specialities`)
+    await fetch(`/api/specialities`)
       .then((response) => response.json())
       .then((specialitiesData: ISpeciality[]) => {
         const specialityGroupsData: ISpecialityGroup[] = [];
@@ -130,6 +143,15 @@ export function SpecialitiesComponent() {
         });
       })
       .catch((error) => console.log(`Error getting specialities`, error));
+
+    await fetch(`/api/specialities`)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setSpecialities(responseData);
+      })
+      .catch((error) => {
+        console.log(`Error getting specialities`, error);
+      });
 
     setPageContentType('specialitiesList');
   }

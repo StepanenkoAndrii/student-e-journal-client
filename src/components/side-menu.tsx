@@ -1,30 +1,17 @@
-import { useEffect, useState } from 'react';
 import { ISpeciality } from '../interfaces/interfaces';
 import { Menu } from 'antd';
 import { MenuGroups } from './groups';
 import { BookOutlined, UserOutlined } from '@ant-design/icons';
 
-export function SideMenu({ setContentType, setContentData }: any) {
-  const [specialities, setSpecialities] = useState<ISpeciality[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+export function SideMenu({
+  setContentType,
+  setContentData,
+  specialities,
+  groups,
+  handleSpecialityGroups
+}: any) {
   const teachersTitle = 'Teachers';
-  const specialitiesTitle = 'Specialties';
-
-  useEffect(() => {
-    if (isLoading) {
-      fetch(`/api/specialities`)
-        .then((response) => response.json())
-        .then((responseData) => {
-          setSpecialities(responseData);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          console.log(`Error getting specialities`, error);
-        });
-    }
-  }, [isLoading]);
+  const specialitiesTitle = 'Specialities';
 
   async function handleTeachersOnClick() {
     setContentType('teachers');
@@ -36,11 +23,16 @@ export function SideMenu({ setContentType, setContentData }: any) {
         key={speciality.specialityId}
         title={`${speciality.number}, ${speciality.name}`}
         icon={<BookOutlined />}
-        onTitleClick={() => setContentType('specialities')}>
+        onTitleClick={() => {
+          handleSpecialityGroups(speciality.specialityId);
+          setContentType('specialities');
+        }}>
         <MenuGroups
           specialityId={speciality.specialityId}
           setContentType={setContentType}
           setContentData={setContentData}
+          groups={groups}
+          handleSpecialityGroups={handleSpecialityGroups}
         />
       </Menu.SubMenu>
     );

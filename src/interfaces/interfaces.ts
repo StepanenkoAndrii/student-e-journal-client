@@ -75,3 +75,15 @@ export interface ISpecialityGroup {
   facultyId: string;
   number?: number;
 }
+
+export interface IStudent {
+  profileId: string;
+  name: string;
+  surname: string;
+  email?: string;
+  phoneNumber: string;
+  phoneNumber2?: string;
+  description?: string;
+  studentId: string;
+  groupId: string;
+}
