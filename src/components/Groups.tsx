@@ -34,7 +34,7 @@ export function MenuGroups({
   });
 
   return (
-    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" key={specialityId + 'groups'}>
       <Menu.SubMenu
         title={groupsTitle}
         icon={<UserOutlined />}

@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { SpecialitiesComponent } from '../../components/admin/specialities/specialities-component';
 import { GroupsComponent } from '../../components/admin/groups/groups-component';
 import { StudentsComponent } from '../../components/admin/students/students-component';
+import { SubjectsComponent } from '../../components/admin/subjects/subjects-component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -64,6 +65,8 @@ export function Admin() {
         return <GroupsComponent specialityId={contentData} setSpecialityGroups={setGroups} />;
       case 'students':
         return <StudentsComponent groupId={contentData} />;
+      case 'subjects':
+        return <SubjectsComponent />;
     }
   };
 

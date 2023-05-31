@@ -12,10 +12,16 @@ export function SideMenu({
 }: any) {
   const teachersTitle = 'Teachers';
   const specialitiesTitle = 'Specialities';
+  const subjectsTitle = 'Subjects';
 
-  async function handleTeachersOnClick() {
-    setContentType('teachers');
-  }
+  const Subjects = (
+    <Menu.Item
+      key={`subjectsTitleKey`}
+      icon={<BookOutlined />}
+      onClick={() => setContentType('subjects')}>
+      {subjectsTitle}
+    </Menu.Item>
+  );
 
   const SpecialitiesArray = specialities.map((speciality: ISpeciality) => {
     return (
@@ -39,7 +45,10 @@ export function SideMenu({
   });
 
   const Teachers = (
-    <Menu.Item key={`teachersTitleKey`} icon={<UserOutlined />} onClick={handleTeachersOnClick}>
+    <Menu.Item
+      key={`teachersTitleKey`}
+      icon={<UserOutlined />}
+      onClick={() => setContentType('teachers')}>
       {teachersTitle}
     </Menu.Item>
   );
@@ -53,6 +62,7 @@ export function SideMenu({
         {SpecialitiesArray}
       </Menu.SubMenu>
       {Teachers}
+      {Subjects}
     </Menu>
   );
 }
