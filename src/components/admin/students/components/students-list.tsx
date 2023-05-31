@@ -7,23 +7,27 @@ interface StudentsListProps {
   setPickedStudent: any;
   handleStudentDelete: () => void;
   goToStudentCreate: () => void;
+  goToStudentInfo: any;
 }
 
 export function StudentsList({
   students,
   setPickedStudent,
   handleStudentDelete,
-  goToStudentCreate
+  goToStudentCreate,
+  goToStudentInfo
 }: StudentsListProps) {
-  console.log(students);
-
   return (
     <>
       <List
         className="list-of-data"
         dataSource={students}
         renderItem={(student) => (
-          <Card key={student.studentId} className="list-item-card card" hoverable={false}>
+          <Card
+            key={student.studentId}
+            className="list-item-card card"
+            hoverable={true}
+            onClick={() => goToStudentInfo(student)}>
             <List.Item key={student.studentId + `item`} className="list-item">
               <List.Item.Meta
                 title={
