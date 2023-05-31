@@ -1,4 +1,4 @@
-import { IGroup } from '../interfaces/interfaces';
+import { IGroup } from '../../../interfaces/interfaces';
 import { Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 

@@ -1,27 +1,21 @@
-import './admin.css';
+import './teacher.css';
 import { useEffect, useState } from 'react';
 import { Button, Card, Layout } from 'antd';
-import { SideMenu } from '../../components/admin/other/side-menu';
-import { AdminDefaultContent } from '../../components/admin/other/admin-default-content';
 import { LogoutOutlined } from '@ant-design/icons';
-import { IGroup, ISpeciality, IUser } from '../../interfaces/interfaces';
-import { TeachersComponent } from '../../components/admin/teachers/teachers-component';
+import { ISubject, IUser } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
-import { SpecialitiesComponent } from '../../components/admin/specialities/specialities-component';
-import { GroupsComponent } from '../../components/admin/groups/groups-component';
-import { StudentsComponent } from '../../components/admin/students/students-component';
-import { SubjectsComponent } from '../../components/admin/subjects/subjects-component';
+import { TeacherDefaultContent } from '../../components/teacher/other/teacher-default-content';
+import { SideMenu } from '../../components/teacher/other/side-menu';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-export function Admin() {
+export function Teacher() {
   const [collapsed, setCollapsed] = useState(false);
   const [contentType, setContentType] = useState('default');
   const [contentData, setContentData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<IUser | null>();
-  const [specialities, setSpecialities] = useState<ISpeciality[]>([]);
-  const [groups, setGroups] = useState<IGroup[]>([]);
+  const [subjects, setSubjects] = useState<ISubject[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,21 +23,20 @@ export function Admin() {
       const promises = [
         fetch(`/api/users/current`)
           .then((response) => response.json())
-          .then((responseData) => {
-            setCurrentUser(responseData);
+          .then((currentUserData: IUser) => {
+            setCurrentUser(currentUserData);
+            fetch(`/api/teacher-subjects?teacherId=${currentUserData?.userId}`)
+              .then((response) => response.json())
+              .then((subjectsData: ISubject[]) => {
+                setSubjects(subjectsData);
+              })
+              .catch((error) => {
+                console.log(`Error getting teacher subjects`, error);
+              });
           })
           .catch((error) => {
             console.log(`Error getting user`, error);
-          }),
-        fetch(`/api/specialities`)
-          .then((response) => response.json())
-          .then((responseData) => {
-            setSpecialities(responseData);
           })
-          .catch((error) => {
-            console.log(`Error getting specialities`, error);
-          })
-          .finally(() => setIsLoading(false))
       ];
 
       Promise.all(promises).then(() => {
@@ -56,17 +49,7 @@ export function Admin() {
     switch (contentType) {
       case 'default':
       default:
-        return <AdminDefaultContent />;
-      case 'specialities':
-        return <SpecialitiesComponent setSpecialities={setSpecialities} />;
-      case 'teachers':
-        return <TeachersComponent />;
-      case 'groups':
-        return <GroupsComponent specialityId={contentData} setSpecialityGroups={setGroups} />;
-      case 'students':
-        return <StudentsComponent groupId={contentData} />;
-      case 'subjects':
-        return <SubjectsComponent />;
+        return <TeacherDefaultContent />;
     }
   };
 
@@ -79,15 +62,6 @@ export function Admin() {
       .catch((error) => {
         console.log(`Error getting user`, error);
       });
-  }
-
-  function handleSpecialityGroups(specialityId: string) {
-    fetch(`/api/groups?specialityId=${specialityId}`)
-      .then((response) => response.json())
-      .then((groupsData: IGroup[]) => {
-        setGroups(groupsData);
-      })
-      .catch((error) => console.log(`Error getting groups`, error));
   }
 
   return (
@@ -104,9 +78,7 @@ export function Admin() {
         <SideMenu
           setContentType={setContentType}
           setContentData={setContentData}
-          specialities={specialities}
-          groups={groups}
-          handleSpecialityGroups={handleSpecialityGroups}
+          subjects={subjects}
         />
       </Sider>
       <Layout className="site-layout">

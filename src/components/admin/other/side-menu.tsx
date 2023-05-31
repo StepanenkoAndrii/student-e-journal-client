@@ -1,4 +1,4 @@
-import { ISpeciality } from '../interfaces/interfaces';
+import { ISpeciality } from '../../../interfaces/interfaces';
 import { Menu } from 'antd';
 import { MenuGroups } from './groups';
 import { BookOutlined, UserOutlined } from '@ant-design/icons';

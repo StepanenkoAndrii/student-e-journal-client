@@ -23,7 +23,8 @@ export function Login() {
     const responseData = await response.json();
 
     if (responseData.role === 'Admin') navigate('/admin');
-    else navigate('/teacher');
+    else if (responseData.role === 'Teacher') navigate('/teacher');
+    else navigate('/notFound');
   };
 
   const onFinishFailed = (errorInfo: any) => {

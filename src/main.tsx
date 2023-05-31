@@ -4,6 +4,8 @@ import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Admin } from './pages/admin/admin.tsx';
 import { Login } from './pages/auth/login.tsx';
+import { NotFound } from './pages/not-found/not-found.tsx';
+import { Teacher } from './pages/teacher/teacher.tsx';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +18,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/teacher',
-    element: <div>Teacher page</div>
+    element: <Teacher />
+  },
+  {
+    path: '/notFound',
+    element: <NotFound />
   }
 ]);
 
