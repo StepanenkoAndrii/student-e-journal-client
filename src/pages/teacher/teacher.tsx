@@ -2,10 +2,11 @@ import './teacher.css';
 import { useEffect, useState } from 'react';
 import { Button, Card, Layout } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
-import { ISubject, IUser } from '../../interfaces/interfaces';
+import { IGroup, ISubject, IUser } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { TeacherDefaultContent } from '../../components/teacher/other/teacher-default-content';
 import { SideMenu } from '../../components/teacher/other/side-menu';
+import { JournalComponent } from '../../components/teacher/journal/journal-component';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -16,6 +17,7 @@ export function Teacher() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<IUser | null>();
   const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const [groups, setGroups] = useState<IGroup[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,10 +52,12 @@ export function Teacher() {
       case 'default':
       default:
         return <TeacherDefaultContent />;
+      case 'journal':
+        return <JournalComponent subjectId={contentData.subjectId} group={contentData.group} />;
     }
   };
 
-  async function handleLogout() {
+  function handleLogout() {
     fetch(`/api/authentication/logout`, { method: 'POST' })
       .then(() => {
         setCurrentUser(null);
@@ -62,6 +66,16 @@ export function Teacher() {
       .catch((error) => {
         console.log(`Error getting user`, error);
       });
+  }
+
+  function handleSubjectGroups(subjectId: string) {
+    fetch(`/api/subject-groups?subjectId=${subjectId}`)
+      .then((response) => response.json())
+      .then((groupsData: IGroup[]) => {
+        console.log(groupsData);
+        setGroups(groupsData);
+      })
+      .catch((error) => console.log(`Error getting groups`, error));
   }
 
   return (
@@ -79,6 +93,8 @@ export function Teacher() {
           setContentType={setContentType}
           setContentData={setContentData}
           subjects={subjects}
+          groups={groups}
+          handleSubjectGroups={handleSubjectGroups}
         />
       </Sider>
       <Layout className="site-layout">

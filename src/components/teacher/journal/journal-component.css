@@ -1,0 +1,14 @@
+.editable-cell {
+  position: relative;
+  padding-right: 0 !important;
+}
+
+.editable-cell-value-wrap {
+  padding: 0px 0px;
+  cursor: pointer;
+}
+
+/* .editable-row:hover .editable-cell-value-wrap { */
+.ant-table-cell:hover .editable-cell-value-wrap {
+  border-radius: 2px;
+}

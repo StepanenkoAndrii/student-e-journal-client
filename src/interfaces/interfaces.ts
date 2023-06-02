@@ -87,3 +87,11 @@ export interface IStudent {
   studentId: string;
   groupId: string;
 }
+
+export interface IGrade {
+  gradeId: string;
+  value: string;
+  studentId: string;
+  date: string;
+  subjectId: string;
+}

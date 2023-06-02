@@ -1,9 +1,23 @@
-import { ISubject } from '../../../interfaces/interfaces';
+import { IGroup, ISubject } from '../../../interfaces/interfaces';
 import { Menu } from 'antd';
 import { BookOutlined } from '@ant-design/icons';
 import { MenuGroups } from './menu-groups';
 
-export function SideMenu({ setContentType, setContentData, subjects }: any) {
+interface SideMenuProps {
+  setContentType: any;
+  setContentData: any;
+  subjects: ISubject[];
+  groups: IGroup[];
+  handleSubjectGroups: any;
+}
+
+export function SideMenu({
+  setContentType,
+  setContentData,
+  subjects,
+  groups,
+  handleSubjectGroups
+}: SideMenuProps) {
   const subjectsTitle = 'Subjects';
 
   const SubjectsArray = subjects.map((subject: ISubject) => {
@@ -13,9 +27,15 @@ export function SideMenu({ setContentType, setContentData, subjects }: any) {
         title={subject.name}
         icon={<BookOutlined />}
         onTitleClick={() => {
-          setContentType('subjects');
+          handleSubjectGroups(subject.subjectId);
+          setContentType('groups');
         }}>
-        <MenuGroups />
+        <MenuGroups
+          setContentType={setContentType}
+          setContentData={setContentData}
+          groups={groups}
+          subjectId={subject.subjectId}
+        />
       </Menu.SubMenu>
     );
   });
