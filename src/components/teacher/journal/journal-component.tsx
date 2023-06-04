@@ -23,8 +23,6 @@ export function JournalComponent({ subjectId, group }: JournalComponentProps) {
       .catch((error) => console.log(`Error getting group students`, error));
   }, []);
 
-  console.log(group, students);
-
   const months: TabsProps['items'] = [
     {
       key: '1',
@@ -122,39 +120,3 @@ export function JournalComponent({ subjectId, group }: JournalComponentProps) {
     </Card>
   );
 }
-
-// const data = students.map((student) => {
-//   const studentGrades = grades.find((grade) => grade.studentId === student.id);
-//   const gradeData: any = {
-//     key: student.id,
-//     name: student.name
-//   };
-//   if (studentGrades) {
-//     for (let i = 0; i < 31; i++) {
-//       gradeData[`day${i + 1}`] = studentGrades.grades[i] || '';
-//     }
-//   } else {
-//     for (let i = 0; i < 31; i++) {
-//       gradeData[`day${i + 1}`] = '';
-//     }
-//   }
-//   return gradeData;
-// });
-
-// return (
-//   <Card className="main-card card">
-//     <Tabs defaultActiveKey="1" items={months} onChange={onTabChange} />
-//     {/* {months.map((month) => (
-//         <TabPane tab={month.name} key={month.id}>
-//           <Table
-//             columns={columns}
-//             dataSource={data}
-//             pagination={false}
-//             bordered={true}
-//             scroll={{ x: 3500, y: 1000 }}
-//           />
-//         </TabPane>
-//       ))} */}
-//     {/* </Tabs> */}
-//   </Card>
-// );

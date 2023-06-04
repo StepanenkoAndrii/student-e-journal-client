@@ -12,3 +12,13 @@
 .ant-table-cell:hover .editable-cell-value-wrap {
   border-radius: 2px;
 }
+
+.student-button {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.student-button:focus {
+  outline: none;
+}

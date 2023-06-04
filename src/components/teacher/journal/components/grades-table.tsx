@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { IGrade, IStudent } from '../../../../interfaces/interfaces';
-import { Form, FormInstance, Input, InputRef, Table } from 'antd';
+import { Button, Card, Form, FormInstance, Input, InputRef, Modal, Table } from 'antd';
 import React from 'react';
 
 type EditableTableProps = Parameters<typeof Table>[0];
@@ -8,6 +8,7 @@ type EditableTableProps = Parameters<typeof Table>[0];
 interface DataType {
   key: React.Key;
   name: string;
+  studentId: string;
   day1: string;
   day2: string;
   day3: string;
@@ -23,6 +24,22 @@ interface DataType {
   day13: string;
   day14: string;
   day15: string;
+  day16: string;
+  day17: string;
+  day18: string;
+  day19: string;
+  day20: string;
+  day21: string;
+  day22: string;
+  day23: string;
+  day24: string;
+  day25: string;
+  day26: string;
+  day27: string;
+  day28: string;
+  day29: string;
+  day30: string;
+  day31: string;
 }
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -56,7 +73,7 @@ interface EditableCellProps {
   dataIndex: keyof Item;
   record: Item;
   // eslint-disable-next-line no-unused-vars
-  handleSave: (record: Item) => void;
+  handleSave: (record: Item, values: any) => void;
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
@@ -88,7 +105,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       const values = await form.validateFields();
 
       toggleEdit();
-      handleSave({ ...record, ...values });
+      handleSave({ ...record, ...values }, values);
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -125,16 +142,13 @@ interface GradesTableProps {
   subjectId: string;
 }
 
-interface IStudentGrade {
-  studentId: string;
+interface IStudentGrade extends IStudent {
   grades: IGrade[];
 }
 
 export function GradesTable({ monthIndex, students, subjectId }: GradesTableProps) {
-  console.log(subjectId);
-
-  const [studentGrades, setStudentGrades] = useState<IStudentGrade[]>([]);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   async function getStudentGrades(studentId: string) {
     const response = await fetch(
@@ -152,7 +166,8 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
         ...student,
         grades: gradesData[index]
       }));
-      setStudentGrades(studentsWithGrades);
+
+      setInitialStudentGrades(studentsWithGrades);
     };
 
     if (students.length > 0) {
@@ -160,301 +175,42 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     }
   }, [students]);
 
-  // useEffect(() => {
-  //   console.log('here');
-  //   const studentGradesWithDate: any[] = [];
-  //   if (isLoading) {
-  //     const promises = students.map((student) => {
-  //       return fetch(
-  //         `/api/grades?studentId=${student.studentId}&monthIndex=${monthIndex}&subjectId=${subjectId}`
-  //       )
-  //         .then((response) => response.json())
-  //         .then((gradesData: IGrade[]) => {
-  //           console.log(gradesData);
-  //           studentGradesWithDate.push({ grades: [...gradesData] });
-  //         });
-  //     });
+  function setInitialStudentGrades(studentsWithGrades: IStudentGrade[]) {
+    const studentsGradesData = [];
+    let counter = 0;
+    for (const studentWithGrades of studentsWithGrades) {
+      const studentGradesDataObj: any = {
+        key: counter,
+        studentId: studentWithGrades.studentId,
+        name: `${studentWithGrades.surname} ${studentWithGrades.name}`
+      };
 
-  //     console.log(promises);
+      console.log(studentWithGrades.grades);
 
-  //     Promise.all(promises).then(() => {
-  //       console.log(studentGradesWithDate);
-  //       setIsLoading(false);
-  //       setGrades(studentGradesWithDate);
-  //     });
-  //   }
-  // }, [grades, isLoading]);
+      if (studentWithGrades.grades.length > 0) {
+        for (let i = 0; i < 31; i++) {
+          if (studentWithGrades.grades[i]?.value) {
+            const date = new Date(studentWithGrades.grades[i]?.date);
+            const dayIndex = date.getDate();
 
-  console.log(`grades`, studentGrades);
+            studentGradesDataObj[`day${dayIndex}`] = studentWithGrades.grades[i]?.value;
+          }
+        }
+        for (let i = 0; i < 31; i++) {
+          if (!studentGradesDataObj[`day${i + 1}`]) studentGradesDataObj[`day${i + 1}`] = '-';
+        }
+      } else {
+        for (let i = 0; i < 31; i++) {
+          studentGradesDataObj[`day${i + 1}`] = '-';
+        }
+      }
 
-  const [dataSource, setDataSource] = useState<DataType[]>([
-    {
-      key: '0',
-      name: 'Edward King 0',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '1',
-      name: 'Edward King 1',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
-    },
-    {
-      key: '2',
-      name: 'Edward King 2',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '3',
-      name: 'Edward King 3',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
-    },
-    {
-      key: '4',
-      name: 'Edward King 4',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '5',
-      name: 'Edward King 5',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
-    },
-    {
-      key: '6',
-      name: 'Edward King 6',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '7',
-      name: 'Edward King 7',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
-    },
-    {
-      key: '8',
-      name: 'Edward King 8',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '9',
-      name: 'Edward King 9',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
-    },
-    {
-      key: '10',
-      name: 'Edward King 10',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '11',
-      name: 'Edward King 11',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
-    },
-    {
-      key: '12',
-      name: 'Edward King 12',
-      day1: '9',
-      day2: '-',
-      day3: '4',
-      day4: '5',
-      day5: '-',
-      day6: '6',
-      day7: '9',
-      day8: 'a',
-      day9: '9',
-      day10: 'a',
-      day11: '6',
-      day12: '9',
-      day13: '10',
-      day14: '-',
-      day15: '7'
-    },
-    {
-      key: '13',
-      name: 'Edward King 13',
-      day1: '6',
-      day2: '8',
-      day3: '-',
-      day4: '6',
-      day5: '8',
-      day6: 'a',
-      day7: 'a',
-      day8: 'a',
-      day9: '10',
-      day10: '-',
-      day11: '8',
-      day12: '9',
-      day13: '9',
-      day14: '-',
-      day15: 'a'
+      studentsGradesData.push(studentGradesDataObj);
+      counter++;
     }
-  ]);
+
+    setDataSource(studentsGradesData);
+  }
 
   const defaultColumns: (ColumnTypes[number] & {
     editable?: boolean;
@@ -464,7 +220,17 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
       title: 'name',
       dataIndex: 'name',
       width: 150,
-      align: 'center'
+      align: 'center',
+      render: (text) => (
+        <Button
+          className="student-button"
+          onClick={() => {
+            // setPickedStudent();
+            setIsModalOpen(true);
+          }}>
+          {text}
+        </Button>
+      )
     },
     {
       title: 'Day 1',
@@ -570,18 +336,220 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
       editable: true,
       width: 80,
       align: 'center'
+    },
+    {
+      title: 'Day 16',
+      dataIndex: 'day16',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 17',
+      dataIndex: 'day17',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 18',
+      dataIndex: 'day18',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 19',
+      dataIndex: 'day19',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 20',
+      dataIndex: 'day20',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 21',
+      dataIndex: 'day21',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 22',
+      dataIndex: 'day22',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 23',
+      dataIndex: 'day23',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 24',
+      dataIndex: 'day24',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 25',
+      dataIndex: 'day25',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 26',
+      dataIndex: 'day26',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 27',
+      dataIndex: 'day27',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 28',
+      dataIndex: 'day28',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 29',
+      dataIndex: 'day29',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 30',
+      dataIndex: 'day30',
+      editable: true,
+      width: 80,
+      align: 'center'
+    },
+    {
+      title: 'Day 31',
+      dataIndex: 'day31',
+      editable: true,
+      width: 80,
+      align: 'center'
     }
   ];
 
-  const handleSave = (row: DataType) => {
+  function updateStudentGrades(
+    studentId: string,
+    subjectId: string,
+    formattedDate: string,
+    newValue: string
+  ) {
+    fetch(`/api/grades/params?studentId=${studentId}&subjectId=${subjectId}&date=${formattedDate}`)
+      .then((response) => response.text())
+      .then((gradeId) => {
+        if (gradeId === '') {
+          addStudentGrade(studentId, subjectId, formattedDate, newValue);
+        } else {
+          updateStudentGrade(gradeId, newValue);
+        }
+      });
+  }
+
+  function addStudentGrade(
+    studentId: string,
+    subjectId: string,
+    formattedDate: string,
+    newValue: string
+  ) {
+    if (newValue !== 'a' && newValue !== '-' && !Number(newValue)) {
+      return 'Incorrect grade value';
+    }
+
+    fetch(`/api/grades`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        value: newValue,
+        studentId,
+        subjectId,
+        date: formattedDate
+      })
+    })
+      .then((response) => response.text())
+      .then((gradeId) => {
+        console.log(gradeId);
+      });
+  }
+
+  function updateStudentGrade(gradeId: string, newValue: string) {
+    if (newValue !== 'a' && newValue !== '-' && !Number(newValue)) {
+      return 'Incorrect grade value';
+    }
+
+    if (newValue !== '-') {
+      fetch(`/api/grades/${gradeId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          value: newValue
+        })
+      });
+    } else {
+      fetch(`/api/grades/${gradeId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+  }
+
+  const handleSave = (row: DataType, values: any) => {
+    const year = 2023;
+    const month = Number(monthIndex) - 1;
+    const day = Number(Object.keys(values)[0].substring(3));
+    const dateToUpdate = new Date(year, month, day);
+    const formattedDate = dateToUpdate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    const studentId = row.studentId;
+    const newValue = String(Object.values(values)[0]);
+
+    // console.log('date', formattedDate);
+    // console.log('row', row);
+    // console.log('values', values);
+
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
+    console.log('item', item);
     newData.splice(index, 1, {
       ...item,
       ...row
     });
     setDataSource(newData);
+    updateStudentGrades(studentId, subjectId, formattedDate, newValue);
+    // console.log('new data', newData);
   };
 
   const components = {
@@ -607,11 +575,47 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     };
   });
 
-  // return (
-  //   <Card className="main-card card">
-  //     <Tabs defaultActiveKey="1" items={months} onChange={onTabChange} />
-  //   </Card>
-  // );
+  function CustomCardRow({ currValue, student }: any) {
+    const keys = [
+      'First name',
+      'Second name',
+      'Email',
+      'Phone number',
+      'Secondary phone number',
+      'Description'
+    ];
+
+    const values = [
+      student!.name,
+      student!.surname,
+      student!.email,
+      student!.phoneNumber,
+      student!.phoneNumber2 ?? 'No secondary phone',
+      student!.description ?? 'No description'
+    ];
+
+    return (
+      <Card className="card-row">
+        <Card.Grid hoverable={false} className="key-card">
+          {keys[currValue]}
+        </Card.Grid>
+        <Card.Grid hoverable={false} className="value-card">
+          {values[currValue]}
+        </Card.Grid>
+      </Card>
+    );
+  }
+
+  const ModalWindowData = (
+    <Card className="form-card">
+      <CustomCardRow currValue={0} />
+      <CustomCardRow currValue={1} />
+      <CustomCardRow currValue={2} />
+      <CustomCardRow currValue={3} />
+      <CustomCardRow currValue={4} />
+      <CustomCardRow currValue={5} />
+    </Card>
+  );
 
   return (
     <div>
@@ -626,6 +630,9 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
         dataSource={dataSource}
         columns={columns as ColumnTypes}
       />
+      <Modal title="Teacher deletion" open={isModalOpen}>
+        {ModalWindowData}
+      </Modal>
     </div>
   );
 }
