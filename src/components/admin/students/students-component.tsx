@@ -3,7 +3,7 @@ import { IStudent } from '../../../interfaces/interfaces';
 import { Card, Modal } from 'antd';
 import { StudentsList } from './components/students-list';
 import { StudentCreate } from './components/student-create';
-import { StudentInfo } from './components/student-into';
+import { StudentInfo } from './components/student-info';
 import { StudentUpdate } from './components/student-update';
 
 interface StudentsComponentProps {

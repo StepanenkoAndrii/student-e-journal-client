@@ -149,6 +149,9 @@ interface IStudentGrade extends IStudent {
 export function GradesTable({ monthIndex, students, subjectId }: GradesTableProps) {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pickedStudent, setPickedStudent] = useState<IStudent | null>(null);
+  const [pickedStudentTotalGrade, setPickedStudentTotalGrade] = useState(0);
+  const [pickedStudentTotalSkips, setPickedStudentTotalSkips] = useState(0);
 
   async function getStudentGrades(studentId: string) {
     const response = await fetch(
@@ -221,11 +224,11 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
       dataIndex: 'name',
       width: 150,
       align: 'center',
-      render: (text) => (
+      render: (text, record: any) => (
         <Button
           className="student-button"
-          onClick={() => {
-            // setPickedStudent();
+          onClick={async () => {
+            await handlePickedStudent(record.studentId);
             setIsModalOpen(true);
           }}>
           {text}
@@ -451,6 +454,25 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     }
   ];
 
+  async function handlePickedStudent(studentId: string) {
+    const response = await fetch(`/api/students/${studentId}`);
+    const responseData = await response.json();
+
+    const response2 = await fetch(
+      `/api/grades/total-grade?studentId=${studentId}&subjectId=${subjectId}`
+    );
+    const responseData2 = await response2.json();
+
+    const response3 = await fetch(
+      `/api/grades/skips?studentId=${studentId}&subjectId=${subjectId}`
+    );
+    const responseData3 = await response3.json();
+
+    setPickedStudent(responseData);
+    setPickedStudentTotalGrade(responseData2);
+    setPickedStudentTotalSkips(responseData3);
+  }
+
   function updateStudentGrades(
     studentId: string,
     subjectId: string,
@@ -552,6 +574,10 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     // console.log('new data', newData);
   };
 
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   const components = {
     body: {
       row: EditableRow,
@@ -575,14 +601,16 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     };
   });
 
-  function CustomCardRow({ currValue, student }: any) {
+  function CustomCardRow({ currValue, student, totalGrade, skips }: any) {
     const keys = [
       'First name',
       'Second name',
       'Email',
       'Phone number',
-      'Secondary phone number',
-      'Description'
+      'Secondary phone',
+      'Description',
+      'Total subject grade',
+      'Number of skips'
     ];
 
     const values = [
@@ -591,15 +619,17 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
       student!.email,
       student!.phoneNumber,
       student!.phoneNumber2 ?? 'No secondary phone',
-      student!.description ?? 'No description'
+      student!.description ?? 'No description',
+      totalGrade,
+      skips
     ];
 
     return (
       <Card className="card-row">
-        <Card.Grid hoverable={false} className="key-card">
+        <Card.Grid hoverable={false} className="key-card key-card-small">
           {keys[currValue]}
         </Card.Grid>
-        <Card.Grid hoverable={false} className="value-card">
+        <Card.Grid hoverable={false} className="value-card value-card-small">
           {values[currValue]}
         </Card.Grid>
       </Card>
@@ -607,13 +637,55 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
   }
 
   const ModalWindowData = (
-    <Card className="form-card">
-      <CustomCardRow currValue={0} />
-      <CustomCardRow currValue={1} />
-      <CustomCardRow currValue={2} />
-      <CustomCardRow currValue={3} />
-      <CustomCardRow currValue={4} />
-      <CustomCardRow currValue={5} />
+    <Card className="form-card form-card-small">
+      <CustomCardRow
+        currValue={0}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={1}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={2}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={3}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={4}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={5}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={6}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
+      <CustomCardRow
+        currValue={7}
+        student={pickedStudent}
+        totalGrade={pickedStudentTotalGrade}
+        skips={pickedStudentTotalSkips}
+      />
     </Card>
   );
 
@@ -630,7 +702,16 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
         dataSource={dataSource}
         columns={columns as ColumnTypes}
       />
-      <Modal title="Teacher deletion" open={isModalOpen}>
+      <Modal
+        title="Student info"
+        open={isModalOpen}
+        onCancel={closeModal}
+        onOk={closeModal}
+        footer={[
+          <Button key="ok" type="primary" onClick={closeModal}>
+            OK
+          </Button>
+        ]}>
         {ModalWindowData}
       </Modal>
     </div>

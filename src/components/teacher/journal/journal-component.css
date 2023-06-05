@@ -22,3 +22,17 @@
 .student-button:focus {
   outline: none;
 }
+
+.key-card-small {
+  font-size: 14px !important;
+  padding: 10px !important;
+}
+
+.value-card-small {
+  font-size: 14px !important;
+  padding: 10px !important;
+}
+
+.form-card-small {
+  height: 40vh !important;
+}
