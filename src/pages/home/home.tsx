@@ -41,6 +41,7 @@ export function Home() {
   }
 
   function goToOtherPage() {
+    console.log(currentUser);
     if (currentUser?.role === 'Administrator') {
       navigate('/admin');
     } else {

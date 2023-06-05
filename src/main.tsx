@@ -7,7 +7,6 @@ import { Login } from './pages/auth/login.tsx';
 import { NotFound } from './pages/not-found/not-found.tsx';
 import { Teacher } from './pages/teacher/teacher.tsx';
 import { Home } from './pages/home/home.tsx';
-import { IUser } from './interfaces/interfaces.ts';
 
 const router = createBrowserRouter([
   {
@@ -20,11 +19,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/admin',
-    element: <ProtectedRoute element={<Admin />} />
+    element: <Admin />
+    // element: <ProtectedRoute element={<Admin />} />
   },
   {
     path: '/teacher',
-    element: <ProtectedRoute element={<Teacher />} />
+    element: <Teacher />
+    // element: <ProtectedRoute element={<Teacher />} />
   },
   {
     path: '*',
@@ -33,8 +34,8 @@ const router = createBrowserRouter([
 ]);
 
 function ProtectedRoute({ element }: { element: any }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<IUser | null>();
 
   useEffect(() => {
     if (isLoading) {
@@ -42,16 +43,16 @@ function ProtectedRoute({ element }: { element: any }) {
         .then((response) => response.json())
         .then((responseData) => {
           if (responseData.userId) {
-            setCurrentUser(responseData);
+            setIsAuthenticated(true);
           }
+          setIsLoading(false);
         })
         .catch((error) => {
           console.log(`Error getting user`, error);
-        })
-        .finally(() => setIsLoading(false));
+          setIsLoading(false);
+        });
     }
   }, [isLoading]);
-  const isAuthenticated = currentUser;
 
   if (isAuthenticated) {
     return element;

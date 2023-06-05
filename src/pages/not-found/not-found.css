@@ -3,7 +3,7 @@
     margin: 0;
 }
 
-.ant-empty-description {
+.empty-not-found .ant-empty-description {
     font-size: 28px !important;
     color: white !important;
 }

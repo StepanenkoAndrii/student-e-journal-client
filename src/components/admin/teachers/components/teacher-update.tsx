@@ -22,16 +22,19 @@ export function TeacherUpdate({
 }: UpdateTeacherProps) {
   const initialValues = {
     ...teacher!,
-    subjects: teacher!.subjects!.map((subject) =>
-      JSON.stringify({
-        subjectId: subject.subjectId,
-        name: subject.name,
-        type: subject.type
-      })
-    )
+    subjects: teacher!.subjects
+      ? teacher!.subjects!.map((subject) =>
+          JSON.stringify({
+            subjectId: subject.subjectId,
+            name: subject.name,
+            type: subject.type
+          })
+        )
+      : []
   };
 
-  const freeAndTeacherSubjects: ISubject[] = [...teacher!.subjects!, ...freeSubjects];
+  const teacherSubjects = teacher!.subjects ? teacher!.subjects! : [];
+  const freeAndTeacherSubjects: ISubject[] = [...teacherSubjects, ...freeSubjects];
 
   return (
     <>
