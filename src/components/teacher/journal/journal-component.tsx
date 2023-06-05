@@ -17,7 +17,6 @@ export function JournalComponent({ subjectId, group }: JournalComponentProps) {
     fetch(`/api/students?groupId=${group.groupId}`)
       .then((response) => response.json())
       .then((studentsData: IStudent[]) => {
-        console.log(studentsData);
         setStudents(studentsData);
       })
       .catch((error) => console.log(`Error getting group students`, error));
@@ -111,9 +110,9 @@ export function JournalComponent({ subjectId, group }: JournalComponentProps) {
   ];
 
   function onTabChange(key: string) {
-    console.log(key);
     setCurrentMonth(key);
   }
+
   return (
     <Card className="main-card card">
       <Tabs defaultActiveKey="1" items={months} onChange={onTabChange} />

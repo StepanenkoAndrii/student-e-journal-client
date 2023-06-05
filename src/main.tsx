@@ -6,8 +6,13 @@ import { Admin } from './pages/admin/admin.tsx';
 import { Login } from './pages/auth/login.tsx';
 import { NotFound } from './pages/not-found/not-found.tsx';
 import { Teacher } from './pages/teacher/teacher.tsx';
+import { Home } from './pages/home/home.tsx';
 
 const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
   {
     path: '/login',
     element: <Login />

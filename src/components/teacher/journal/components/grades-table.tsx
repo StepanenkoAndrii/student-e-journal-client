@@ -188,8 +188,6 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
         name: `${studentWithGrades.surname} ${studentWithGrades.name}`
       };
 
-      console.log(studentWithGrades.grades);
-
       if (studentWithGrades.grades.length > 0) {
         for (let i = 0; i < 31; i++) {
           if (studentWithGrades.grades[i]?.value) {
@@ -511,11 +509,7 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
         subjectId,
         date: formattedDate
       })
-    })
-      .then((response) => response.text())
-      .then((gradeId) => {
-        console.log(gradeId);
-      });
+    });
   }
 
   function updateStudentGrade(gradeId: string, newValue: string) {
@@ -557,21 +551,15 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     const studentId = row.studentId;
     const newValue = String(Object.values(values)[0]);
 
-    // console.log('date', formattedDate);
-    // console.log('row', row);
-    // console.log('values', values);
-
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
-    console.log('item', item);
     newData.splice(index, 1, {
       ...item,
       ...row
     });
     setDataSource(newData);
     updateStudentGrades(studentId, subjectId, formattedDate, newValue);
-    // console.log('new data', newData);
   };
 
   function closeModal() {

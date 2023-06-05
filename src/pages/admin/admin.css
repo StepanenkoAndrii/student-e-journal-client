@@ -31,12 +31,18 @@
 }
 
 .logo-img-wrapper {
-    /* border: 1px solid red; */
     background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100px;
+    width: 100%;
+    outline: none;
+    border: none;
+}
+
+.logo-img-wrapper:focus {
+    outline: none;
 }
 
 .logo-img {

@@ -15,6 +15,7 @@ export function MenuGroups({ setContentType, setContentData, groups, subjectId }
         key={group.groupId}
         title={group.name}
         onClick={() => {
+          console.log('click');
           setContentData({ group, subjectId });
           setContentType('journal');
         }}>
@@ -23,14 +24,5 @@ export function MenuGroups({ setContentType, setContentData, groups, subjectId }
     );
   });
 
-  return (
-    // <Menu.SubMenu
-    //   title={groupsTitle}
-    //   icon={<UserOutlined />}
-    //   onTitleClick={() => {
-    //     setContentType('groups');
-    //   }}>
-    <>{GroupsArray}</>
-    // </Menu.SubMenu>
-  );
+  return <>{GroupsArray}</>;
 }

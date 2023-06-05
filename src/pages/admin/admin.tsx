@@ -74,7 +74,7 @@ export function Admin() {
     fetch(`/api/authentication/logout`, { method: 'POST' })
       .then(() => {
         setCurrentUser(null);
-        navigate('/login');
+        navigate('/');
       })
       .catch((error) => {
         console.log(`Error getting user`, error);
@@ -90,6 +90,10 @@ export function Admin() {
       .catch((error) => console.log(`Error getting groups`, error));
   }
 
+  function goToMainPage() {
+    navigate('/');
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -98,9 +102,9 @@ export function Admin() {
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}>
-        <div className="logo-img-wrapper">
+        <Button onClick={goToMainPage} className="logo-img-wrapper">
           <img className="logo-img" src="src/assets/logo-2.jpg" />
-        </div>
+        </Button>
         <SideMenu
           setContentType={setContentType}
           setContentData={setContentData}

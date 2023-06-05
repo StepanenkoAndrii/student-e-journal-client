@@ -89,5 +89,3 @@ export function Login() {
     </Layout>
   );
 }
-
-export default Login;
