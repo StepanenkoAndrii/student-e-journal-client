@@ -81,9 +81,6 @@ export function Login() {
           <Button type="primary" htmlType="submit" loading={loading}>
             Sign in
           </Button>
-          {/* <Button type="default" htmlType="button" loading={loading}>
-            Register
-          </Button> */}
         </Form.Item>
       </Form>
     </Layout>

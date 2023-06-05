@@ -81,7 +81,7 @@ export function Home() {
           <img className="logo-img-main-page logo-img" src="src/assets/logo.png" />
         </div>
         <Card className="main-page-user-username-card user-username-card">
-          {currentUser ? `${currentUser!.username} (${currentUser!.role})` : 'No user'}
+          {currentUser ? `${currentUser!.username} (${currentUser!.role})` : 'Not authorized'}
         </Card>
         <Button
           icon={<LogoutOutlined />}

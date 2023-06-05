@@ -3,7 +3,11 @@
     margin: 0;
 }
 
-.empty-default {
-    font-size: 20px;
-    margin: 35vh auto 0 auto;
+.ant-empty-description {
+    font-size: 28px !important;
+    color: white !important;
+}
+
+.go-to-button {
+    margin-top: 20px;
 }

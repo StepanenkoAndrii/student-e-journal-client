@@ -103,7 +103,7 @@ export function Teacher() {
       <Layout className="site-layout">
         <Header>
           <Card className="user-username-card">
-            {currentUser ? `${currentUser!.username} (${currentUser!.role})` : 'No user'}
+            {currentUser ? `${currentUser!.username} (${currentUser!.role})` : 'Not authorized'}
           </Card>
           <Button
             icon={<LogoutOutlined />}
