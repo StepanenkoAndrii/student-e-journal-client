@@ -20,7 +20,7 @@ export function JournalComponent({ subjectId, group }: JournalComponentProps) {
         setStudents(studentsData);
       })
       .catch((error) => console.log(`Error getting group students`, error));
-  }, []);
+  }, [group.groupId]);
 
   const months: TabsProps['items'] = [
     {

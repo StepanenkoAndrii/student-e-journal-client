@@ -24,6 +24,7 @@ export function MenuGroups({
       <Menu.Item
         key={group.groupId}
         title={group.name}
+        icon={<UserOutlined />}
         onClick={() => {
           setContentData(group.groupId);
           setContentType('students');

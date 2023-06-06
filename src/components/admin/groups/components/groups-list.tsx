@@ -17,6 +17,9 @@ export function GroupsList({
 }: GroupsListProps) {
   return (
     <>
+      <Card className="title-with-search-card">
+        <h2 className="title-h2">Groups List</h2>
+      </Card>
       <List
         className="list-of-data"
         dataSource={groups}

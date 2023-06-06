@@ -19,6 +19,9 @@ export function StudentsList({
 }: StudentsListProps) {
   return (
     <>
+      <Card className="title-with-search-card">
+        <h2 className="title-h2">Students List</h2>
+      </Card>
       <List
         className="list-of-data"
         dataSource={students}

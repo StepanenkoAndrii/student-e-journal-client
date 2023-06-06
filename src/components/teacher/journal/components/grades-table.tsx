@@ -1,7 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { IGrade, IStudent } from '../../../../interfaces/interfaces';
-import { Button, Card, Form, FormInstance, Input, InputRef, Modal, Table } from 'antd';
+import { Button, Card, Collapse, Form, FormInstance, Input, InputRef, Modal, Table } from 'antd';
 import React from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
+
+ChartJS.register(BarElement, CategoryScale, LinearScale);
 
 type EditableTableProps = Parameters<typeof Table>[0];
 
@@ -146,10 +150,16 @@ interface IStudentGrade extends IStudent {
   grades: IGrade[];
 }
 
+interface IGraphGradeObj {
+  grades: number[];
+  months: string[];
+}
+
 export function GradesTable({ monthIndex, students, subjectId }: GradesTableProps) {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pickedStudent, setPickedStudent] = useState<IStudent | null>(null);
+  const [pickedStudentGrades, setPickedStudentGrades] = useState<IGraphGradeObj | null>(null);
   const [pickedStudentTotalGrade, setPickedStudentTotalGrade] = useState(0);
   const [pickedStudentTotalSkips, setPickedStudentTotalSkips] = useState(0);
 
@@ -173,9 +183,7 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
       setInitialStudentGrades(studentsWithGrades);
     };
 
-    if (students.length > 0) {
-      fetchStudentGrades();
-    }
+    fetchStudentGrades();
   }, [students]);
 
   function setInitialStudentGrades(studentsWithGrades: IStudentGrade[]) {
@@ -222,6 +230,7 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
       dataIndex: 'name',
       width: 150,
       align: 'center',
+      fixed: 'left',
       render: (text, record: any) => (
         <Button
           className="student-button"
@@ -589,6 +598,41 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     };
   });
 
+  async function handlePickedStudentGrades(studentId: string) {
+    const response = await fetch(
+      `/api/grades/graphics?studentId=${studentId}&subjectId=${subjectId}`
+    );
+    const gradesData: IGrade[] = await response.json();
+    let total: any = [[], [], [], [], [], [], [], [], [], [], [], []];
+    gradesData.forEach((grade: IGrade) => {
+      if (grade.value !== 'a') {
+        const date = new Date(grade.date);
+        const monthIndex = date.getMonth();
+        total[monthIndex].push(Number(grade.value));
+      }
+    });
+
+    const gradesArray = total.map((subTotal: number[]) =>
+      subTotal.reduce((sum, num) => sum + num, 0)
+    );
+    const monthArray = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+
+    setPickedStudentGrades({ grades: gradesArray, months: monthArray });
+  }
+
   function CustomCardRow({ currValue, student, totalGrade, skips }: any) {
     const keys = [
       'First name',
@@ -624,57 +668,100 @@ export function GradesTable({ monthIndex, students, subjectId }: GradesTableProp
     );
   }
 
+  function StudentGraphics({ gradesData }: { gradesData: IGraphGradeObj | null }) {
+    if (gradesData) {
+      const labels = gradesData!.months;
+      const data = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total grade by month',
+            data: gradesData!.grades,
+            backgroundColor: ['rgba(0, 21, 41, 0.3)'],
+            borderColor: ['#001529'],
+            borderWidth: 1
+          }
+        ]
+      };
+      const options = {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      };
+
+      return (
+        <div>
+          <Bar data={data} options={options} />
+        </div>
+      );
+    }
+
+    return <div>No data</div>;
+  }
+
   const ModalWindowData = (
-    <Card className="form-card form-card-small">
-      <CustomCardRow
-        currValue={0}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={1}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={2}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={3}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={4}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={5}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={6}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-      <CustomCardRow
-        currValue={7}
-        student={pickedStudent}
-        totalGrade={pickedStudentTotalGrade}
-        skips={pickedStudentTotalSkips}
-      />
-    </Card>
+    <>
+      <Card className="form-card form-card-small">
+        <CustomCardRow
+          currValue={0}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={1}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={2}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={3}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={4}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={5}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={6}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <CustomCardRow
+          currValue={7}
+          student={pickedStudent}
+          totalGrade={pickedStudentTotalGrade}
+          skips={pickedStudentTotalSkips}
+        />
+        <Collapse
+          onChange={async () => await handlePickedStudentGrades(pickedStudent!.studentId)}
+          className="graphics-main">
+          <Collapse.Panel header="Total grade by month" key="1">
+            <StudentGraphics gradesData={pickedStudentGrades} />
+          </Collapse.Panel>
+        </Collapse>
+      </Card>
+    </>
   );
 
   return (

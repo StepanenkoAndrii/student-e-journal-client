@@ -1,7 +1,7 @@
 import { ISpeciality } from '../../../interfaces/interfaces';
 import { Menu } from 'antd';
 import { MenuGroups } from './groups';
-import { BookOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, FileTextOutlined, UserOutlined } from '@ant-design/icons';
 
 export function SideMenu({
   setContentType,
@@ -28,7 +28,7 @@ export function SideMenu({
       <Menu.SubMenu
         key={speciality.specialityId}
         title={`${speciality.number}, ${speciality.name}`}
-        icon={<BookOutlined />}
+        icon={<FileTextOutlined />}
         onTitleClick={() => {
           handleSpecialityGroups(speciality.specialityId);
           setContentType('specialities');
@@ -57,7 +57,7 @@ export function SideMenu({
     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
       <Menu.SubMenu
         title={specialitiesTitle}
-        icon={<BookOutlined />}
+        icon={<FileTextOutlined />}
         onTitleClick={() => setContentType('specialities')}>
         {SpecialitiesArray}
       </Menu.SubMenu>

@@ -1,3 +1,4 @@
+import { UserOutlined } from '@ant-design/icons';
 import { IGroup } from '../../../interfaces/interfaces';
 import { Menu } from 'antd';
 
@@ -14,8 +15,8 @@ export function MenuGroups({ setContentType, setContentData, groups, subjectId }
       <Menu.Item
         key={group.groupId}
         title={group.name}
+        icon={<UserOutlined />}
         onClick={() => {
-          console.log('click');
           setContentData({ group, subjectId });
           setContentType('journal');
         }}>

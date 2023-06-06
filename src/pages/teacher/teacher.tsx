@@ -81,6 +81,8 @@ export function Teacher() {
     navigate('/');
   }
 
+  console.log(contentType, contentData);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider

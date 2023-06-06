@@ -1,0 +1,19 @@
+.title-with-search-card {
+  width: 95% !important;
+  margin: 0 auto;
+  border: none !important;
+}
+
+.title-with-search-card > .ant-card-body {
+  display: flex !important;
+}
+
+.title-h2 {
+  display: block;
+  width: 20%;
+}
+
+.search-input {
+  display: block;
+  width: 80%;
+}
