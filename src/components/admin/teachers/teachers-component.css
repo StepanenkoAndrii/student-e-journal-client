@@ -36,17 +36,17 @@
     color: #fff;
     font-size: 28px !important;
     transform-origin: center;
-    animation: rotating 1s ease-in-out infinite;
+    /* animation: rotating 1s ease-in-out infinite; */
 }
 
-@keyframes rotating{
+/* @keyframes rotating{
     0%{
         transform: rotate(0deg);
     }
     100%{
         transform: rotate(360deg);
     }
-}
+} */
 
 .list-item-card:hover {
     cursor: pointer;
