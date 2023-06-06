@@ -30,6 +30,9 @@ export function Admin() {
         fetch(`/api/users/current`)
           .then((response) => response.json())
           .then((responseData) => {
+            if (responseData.message && responseData.message === 'Unauthorized') {
+              navigate('/');
+            }
             setCurrentUser(responseData);
           })
           .catch((error) => {

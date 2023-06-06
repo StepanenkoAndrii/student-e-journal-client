@@ -25,8 +25,11 @@ export function Teacher() {
       const promises = [
         fetch(`/api/users/current`)
           .then((response) => response.json())
-          .then((currentUserData: IUser) => {
+          .then((currentUserData: any) => {
             setCurrentUser(currentUserData);
+            if (currentUserData.message && currentUserData.message === 'Unauthorized') {
+              navigate('/');
+            }
             fetch(`/api/teacher-subjects?teacherId=${currentUserData?.userId}`)
               .then((response) => response.json())
               .then((subjectsData: ISubject[]) => {
@@ -80,8 +83,6 @@ export function Teacher() {
   function goToMainPage() {
     navigate('/');
   }
-
-  console.log(contentType, contentData);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

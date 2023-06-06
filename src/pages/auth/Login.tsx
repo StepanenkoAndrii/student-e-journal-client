@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './login.css';
-import { Button, Form, Input, Layout, Typography } from 'antd';
+import { Button, Form, Input, Layout, Typography, notification } from 'antd';
 import AnchorLink from 'antd/es/anchor/AnchorLink';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,9 +22,19 @@ export function Login() {
 
     const responseData = await response.json();
 
-    if (responseData.role === 'Admin') navigate('/admin');
-    else if (responseData.role === 'Teacher') navigate('/teacher');
-    else navigate('/notFound');
+    if (responseData.message && responseData.message === 'Wrong credentials provided') {
+      notification.open({
+        message: 'Error',
+        description: 'Wrong credentials provided.',
+        placement: 'bottom',
+        type: 'error'
+      });
+      setLoading(false);
+    } else {
+      if (responseData.role === 'Admin') navigate('/admin');
+      else if (responseData.role === 'Teacher') navigate('/teacher');
+      else navigate('/notFound');
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
